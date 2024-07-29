@@ -19,7 +19,7 @@ char checkWinner();
 void printWinner(char);
 
 int main () {
-    printf("tic tac toe");
+    printf("tic tac toe\n");
     playerCharacter();
     char winner = ' ';
     char playAgain;
@@ -28,7 +28,6 @@ int main () {
     {
         winner = ' ';
         playAgain = ' ';
-        
         resetBoard ();
 
             while (winner == ' ' && checkFreeSpaces() != 0) {
@@ -56,26 +55,30 @@ int main () {
             printf("Play again? y/n: ");
             scanf(" %c", &playAgain);  
             playAgain = tolower(playAgain);
-
+            do {
+                 printf("Play again? PLEASE ANSWER (y/n): ");
+                scanf(" %c", &playAgain);  
+                playAgain = tolower(playAgain);
+            }   while (playAgain != 'y' && playAgain != 'n');
     } while (playAgain == 'y');
     
     return 0;
 }
 
 void playerCharacter() {
-    char input;
+    char inputP;
+    char inputC;
     printf("Choose your character: ");
-    scanf(" %c", &input);
-    PLAYER = input;
+    scanf(" %c", &inputP);
+    PLAYER = inputP;
     
     do {
-        printf("Choose character for computer (should be different from %c): ", PLAYER);
-        scanf(" %c", &input);
-    } while (input == PLAYER || input == ' ');
+        printf("Choose character for computer (must be different from %c): ", PLAYER);
+        scanf(" %c", &inputC);
+    } while (inputP == inputC);
 
-    COMPUTER = input;
+    COMPUTER = inputC;
 }
-
 
 void resetBoard () 
 {
@@ -91,9 +94,9 @@ void printBoard ()
 {
     printf(" %c  | %c  | %c", gameBoard[0][0], gameBoard[0][1], gameBoard[0][2]); //row 0, column 0, y asi
     printf("\n----|----|---- \n");
-    printf(" %c  | %c  | %c", gameBoard[1][0], gameBoard[1][1], gameBoard[1][2]); //row 0, column 0, y asi
+    printf(" %c  | %c  | %c", gameBoard[1][0], gameBoard[1][1], gameBoard[1][2]);
     printf("\n----|----|---- \n");
-    printf(" %c  | %c  | %c", gameBoard[2][0], gameBoard[2][1], gameBoard[2][2]); //row 0, column 0, y asi
+    printf(" %c  | %c  | %c", gameBoard[2][0], gameBoard[2][1], gameBoard[2][2]); 
     printf("\n");
 }
 int checkFreeSpaces() 
@@ -116,24 +119,25 @@ void playerMove()
     int x;
 
     do {
-        printf("Enter row #(1-2-3)", y, x);
-        scanf("%d", &x);                    //cambiar de coso
+        printf("Enter row #(1-3): ");
+        scanf("%d", &x);
         x--;
-        printf("Enter column #(1-2-3)", y, x);
-        scanf("%d", &y);                    //cambiar de coso
+
+        printf("Enter column #(1-3): ");
+        scanf("%d", &y);
         y--;
 
-        if(gameBoard[x][y] != ' ') {
-            printf("Mov. Invalido");
+        if (x < 0 || x > 2 || y < 0 || y > 2 || gameBoard[x][y] != ' ' || isdigit(gameBoard[x][y])) {
+            printf("Invalid move. Try again.\n");
         } else {
             gameBoard[x][y] = PLAYER;
             break;
         }
-    }   while (gameBoard[x][y] != ' ');
+    } while (1);
 }
 void computerMove() 
 {
-    //Es mov random
+    //Es movimiento random xD
     srand(time(0));
     int x;
     int y;
@@ -153,7 +157,8 @@ void computerMove()
 }
 char checkWinner() 
 {
-    //vemos columnas
+    //vemos columnas, posibles wins.
+    //veo horizontales & verticales
 
     for(int i = 0; i < 3; i++) {
         if(gameBoard[i][0] == gameBoard[i][1] && gameBoard[i][0] == gameBoard[i][2] )   
@@ -161,7 +166,7 @@ char checkWinner()
             return gameBoard[i][0];
         }   
     }
-    //veo filas
+
     for(int i = 0; i < 3; i++) {
         if(gameBoard[0][i] == gameBoard[1][i] && gameBoard[0][i] == gameBoard[2][i] )   
         {
