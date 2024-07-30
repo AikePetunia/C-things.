@@ -24,43 +24,41 @@ int main () {
     char winner = ' ';
     char playAgain;
 
-    do
-    {
-        winner = ' ';
-        playAgain = ' ';
-        resetBoard ();
+    do {
+    winner = ' ';
+    playAgain = ' ';
+    resetBoard();
 
-            while (winner == ' ' && checkFreeSpaces() != 0) {
-                printBoard();
+    while (winner == ' ' && checkFreeSpaces() != 0) {
+        printBoard();
 
-                playerMove();
+        playerMove();
 
-                winner = checkWinner();
+        winner = checkWinner();
 
-                if (winner != ' ' || checkFreeSpaces() == 0) {
-                    break;
-                }
+        if (winner != ' ' || checkFreeSpaces() == 0) {
+            break;
+        }
 
-                computerMove();
-                winner = checkWinner();
+        computerMove();
+        winner = checkWinner();
 
-                if (winner != ' ' || checkFreeSpaces() == 0) {
-                    break;
-                }
-            }
+        if (winner != ' ' || checkFreeSpaces() == 0) {
+            break;
+        }
+    }
 
-            printBoard();
-            printWinner(winner);
-            
-            printf("Play again? y/n: ");
-            scanf(" %c", &playAgain);  
-            playAgain = tolower(playAgain);
-            do {
-                 printf("Play again? PLEASE ANSWER (y/n): ");
-                scanf(" %c", &playAgain);  
-                playAgain = tolower(playAgain);
-            }   while (playAgain != 'y' && playAgain != 'n');
-    } while (playAgain == 'y');
+    printBoard();
+    printWinner(winner);
+
+    do {
+        printf("Play again? (y/n): ");
+        scanf(" %c", &playAgain);
+        playAgain = tolower(playAgain);
+    } while (playAgain != 'y' && playAgain != 'n');
+
+} while (playAgain == 'y');
+
     
     return 0;
 }
