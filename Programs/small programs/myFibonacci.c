@@ -1,28 +1,25 @@
 #include <stdio.h>
+long long int cb1 = 0;
+long long int cb2 = 1;
+long long int fibonacciSum = 0;
 /*
- * Escribe un programa que muestre por consola (con un print) los
- * números de 1 a 100 (ambos incluidos y con un salto de línea entre
- * cada impresión), sustituyendo los siguientes:
- * - Múltiplos de 3 por la palabra "fizz".
- * - Múltiplos de 5 por la palabra "buzz".
- * - Múltiplos de 3 y de 5 a la vez por la palabra "fizzbuzz".
- * - de moure dev. 1/100
+ * Escribe un programa que imprima los 50 primeros números de la sucesión
+ * de Fibonacci empezando en 0.
+ * - La serie Fibonacci se compone por una sucesión de números en
+ *   la que el siguiente siempre es la suma de los dos anteriores.
+ *   0, 1, 1, 2, 3, 5, 8, 13...
 */
 
-int main () {
-    int x;
+long long int fibonacci() {
+    cb1 = cb2;          // 1, 0, 1
+    cb2 = fibonacciSum; //0, 1, 1
+    fibonacciSum = cb1 + cb2; // =1, 1,bla bla
+    return fibonacciSum; // = 1, 1, 2
+}
 
-    for (int i = 0; i <= 100; i++) {
-        if (i % 3 == 0) {
-            printf("fizz\n");
-        } else if (i % 5 == 0) {
-            printf("buzz\n");
-        } else if (i % 3 == 0 && i % 5 == 0) {
-            printf("fizzbuzz\n");
-        } else {
-            printf("%d \n", i);
-        }
+int main() {
+    for (int i = 0; i <= 50; i++) {
+        printf("%d\n", fibonacci());
     }
-
     return 0;
 }
