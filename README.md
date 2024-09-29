@@ -1,1 +1,1 @@
-Anotaciones, Practicas de programas en C
+Notes and practices on C.
