@@ -79,7 +79,7 @@ int main() {
 
     int nota;
     printf("\n pone la nota:");
-    scanf("%d\n", &nota);
+    scanf("%d\n", &nota);   //almacena el dato en la nota
 
     switch (nota) {
         case 1 : 

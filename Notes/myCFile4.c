@@ -137,7 +137,7 @@ int main() {
     
     do{
         printf ("\nescriba un numero");
-        scanf("%d", &number3);
+        scanf("%d", &number3); //almacena el dato en la var 3.
         if (number3 > 0) 
         {
             sum += number3;
