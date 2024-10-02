@@ -289,6 +289,215 @@ https://r9.whiteboardfox.com/93872386-7680-8941
 
 --13)
 
+a)
+si se refiere a el x := x * x si, por que se esta multiplicando el valor de x por si mismo para dar positivo.
+
+b)
+
+1)
+
+        wp.S.Q
+    ={ Definicion de wp por asignacion }
+        wp.(x := x * x).(True)
+    ={Def. de true}
+        True.
+
+El true es mas debil. Ya que solo requiere que la condicion sea verdadera, y nada mas.
+2)
+
+    wp.S.Q
+={ Definicion de wp por asignacion }
+    wp.(x := x * x).(x >= 0)
+={ Aplico la asginacion}
+    (x * x) >= 0
+={ Aritmetica}
+    x >= 0 
+
+la Q es la mas fuerte, ya que pide que sea mayor o igual que 0 (o sea, toma numeros del 0 al inf)
+
+3)
+
+    wp.S.Q
+={ Definicion de wp por asignacion }
+    wp.(x := x * x ).(x > 0 ^ x < 100) 
+={Asignacion}
+    (x * x) > 0 ^ (x * x) < 100
+={Aritmetica}
+    |x| > 0 ^ |x| < 10 
+={Funca}
+
+La wp es la p, ya que pide que sea mayor a 0 y menor a 100 (restrigue solo un rango), en cambio el otro pide del 0, al inf, intervalo abierto.
+
+c) con una restriccion menos "existente o molesta"
+
+d)
+
+Ejemplo 4 (práctico 5, ejercicio 4a): 
+
+{ x > 0 }   x := x * x   { True }
+
+¿Vale? Sí vale, ya que siempre terminamos en un estado final que satisface True.
+
+Ejemplo 7: Cálculo del máximo mal especificado:
+     Var  r, x, y : Int;
+     { P: True }
+     S
+     { Q: r = x max y }
+
+¿Cuál es el programa más simple que podemos dar que satisface esta especificación?
+
+¿Vale la siguiente terna?:
+     Var  r, x, y : Int;
+     { True }
+     r, x, y := 0, 0, 0
+     { r = x max y }
+¡Vale!
+
+¿Es correcta esta especificación para el cálculo del máximo entre x e y? No, porque admite programas que no reflejan el problema que yo quiero solucionar.
+
+La especificación funciona como contrato entre la persona que quiere resolver el problema y la persona que lo va a solucionar. 
+
+Especificación correcta para max:
+     Var  r, x, y : Int;
+     { x = A ∧ y = B }
+     S
+     { r = A max B }
+(usando variables de especificación A y B)
 
 
+--14)
+
+    wp.S.Q
+={ Definicion de wp por asignacion }
+    wp.(x := x * x ).(x > 0 ^ x < 100) 
+={Asignacion}
+    (x * x) > 0 ^ (x * x) < 100
+={Aritmetica}
+    |x| > 0 ^ |x| < 10 
+={Funca}
+
+    wp.S.Q
+={ Definicion de wp por asignacion }
+    wp.(x := x + y).(x = 6 ^ y = 5)
+={Asignacion}
+    x + y = 6 ^ y x + y = 5
+
+b)
+    
+        wp.S.Q
+    ={Definicion de wp por asignacion}
+        wp.(x:=8).(x = 8)
+    ={Asignacion}
+        8 = 8
+    ={logica}
+        True
+
+c)
+
+        wp.S.Q
+    ={Definicion de wp por asignacion}
+        wp.(x:=8).(x = 7)
+    ={Asignacion}
+        8 = 7
+    ={Logica}+
+        False 
+
+d)
+    
+            wp.S.Q
+        ={Definicion de wp por asignacion}
+            wp.(x, y = y, x).(x = B ^ y = A)
+        ={Asignacion}
+            x, y = B, ^ y, x = A
+        ={Logica}
+            
+
+Es de este estilo:
+
+Ejemplo 1: “Swap” (intercambio de valores):
+
+      { x = A  ∧  y = B } 
+        x, y := y , x 
+      { x = B ∧ y = A }
+
+(A y B son variables de especificación)
+
+¿Vale esta terna?
+Si empezamos en un estado que satisface P, ¿al ejecutar S terminamos en un estado que satisface Q? ¡Si! Siempre.
+
+e)
+
+        wp.S.Q
+    ={Definicion de wp por asignacion}
+        wp.(a,x := x, y).(x = B ^ y = A)
+    ={Asignacion}
+        x, y
+    ={Logica}
+        False
+
+f)
+
+        wp.S.Q
+    ={Definicion de wp por asignacion}
+        wp.(x >= y v x <= y).((x = 0 v x = 2) ^ y = 1)
+    ={Distributividad de v con ^}
+        wp.(x >= y v x <= y).((x = 0 ^ y = 1 )v (x = 2 ^ y = 1))
+    ={Hago dos casos, uno para x >= y (1), otro para x <= y (2)}
+        
+    (1)
+        wp.(x := 0).((0 = 0 ^ y = 1 )v (0 = 2 ^ y = 1))
+    ={Asignacion}
+        (true ^ 1 = 1 )v (False ^ 1 = 1)
+    ={Logica}
+        true v false
+    ={logica}
+        True 
+    
+    (2)
+        wp.(x := 2).((x = 0 ^ y = 1 )v (x = 2 ^ y = 1))
+    ={Asignacion}
+        ((2 = 0 ^ y = 1 )v (2 = 2 ^ y = 1))
+    ={Logica}
+        (False ^ 1 = 1 )v (True ^ 1 = 1)
+    ={Logica}
+        False v True
+    ={Logica}
+        True
+
+
+--15)
+
+a)
+
+    Es true, pues la precondicion dice que es verdadero, pero la post condicion no se cumpliria para x =  1 si toma x - 1
+
+b)
+    Es true, pues por swap se cumplira la primera guarda si es q no se cumplio
+
+c)
+
+    si el s nos condicion a q sera valido. notemos que duplica el valor de x, teniendo que ser siempre mayor a un negativo.
+    ademas, se asegura que el mas grande sea restado por el mas pequeño, manteineod siempre una resta de un positivo por un negativo, cumpliendo.
+    pero, tienen que cumoplirse ambos al mism otiempo
+
+d)
+
+    Es por tabla de la verdad de v. 
+    El unico que no se cumpliria seria para no b y no a.
+
+e) 
+
+    Es un cconteno desde el 0 hasta que alcance el valro de n. sera true cuando se alcance x = n
+
+f)
+
+    no funciona, pues n no aparece en la postcondicion.
+
+
+--16)
+
+a)
+
+    si valida, es una sumatira de elementos hasta llegar al elemento N de la lista A
+    
 */
