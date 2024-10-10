@@ -18,5 +18,8 @@ int main() {
 
     // 1 Byte, trabajan en binario 1 = True, 0 = False    %d
     // 1 Byte, trabajan en binario 1 = True, 0 = False    %d    
+    //podria poner la logica en una variable y luego imprimir la variable
+
+    //Chekiado
     return 0;
 }

@@ -26,58 +26,64 @@ x := x + y
 d)
 
 Var x,y : Int;
-    σ0 : (x 7→2,y 7→5)
+    σ0 : (x →2,y →5)
 y,x := y + y,x + y
-    σ1 : 17
+    σ1 : 10, 7
 
+//Chekiado
 
 -2)
 
 a) El orden de ejecucion. En el caso de la a) se ejecuta primero la asignacion de x = 5 y luego se imprime el valor de x.
-Las variables. 
+Las variables, son asignadas de manera diferente.
 
 b) el d lo hace. 
-
 
 -3)
 
 a) 
-x= 3, y = 1
-si x>= y entonces x = 0. <- EL UNICO que se cumple.
+x = 3, y = 1
 
-si x <= y entonces x = 2.
+    si x >= y entonces x = 0. <- EL UNICO que se cumple.
 
-si x = y entonces se romperia? 
+    si x <= y entonces x = 2.  **NO SE CUMPLE**
+
+    si x = y entonces toma el primero valor
 
 b) 
 x = 100, y = 1 
 
-si x>= y entonces x = 0. <- EL UNICO que se cumple. 
+    si x>= y entonces x = 0. <- EL UNICO que se cumple. 
 
-si x <= y entonces x = 2. 
+    si x <= y entonces x = 2. **NO SE CUMPLE**
 
+    si x = y entonces toma el primero valor **NO SE CUMPLE**
 c)
 
 x = 1, y = 1
 
-si x>= y entonces x = 0.<- se cumple.
-si x<= y entonces x = 2. <- se cumple.
+si x>= y entonces x = 0.
 
--4) que seyo, se rompe todo.
+si x<= y entonces x = 2. 
+
+si x = y entonces toma el primero valor, o sea x := 0. <- se cumple.
+
+-4) queseyo, se rompe todo.
+Segun c, da el ultimo valor. No da un error del tipo "no exhaustive patterns"
 
 -5)
 
 a)
 i = 4
   i /= 0
-    i = 4, i = 4 - 1 = 3, 
-    i = 3 - 1 = 2,
-    i = 2 - 1 = 1, 
-    i = 1 - 1 = 0
+    i = 4 - 1 = 3, 
+    i == 3 - 1 = 2,
+    i == 2 - 1 = 1, 
+    i == 1 - 1 = 0
 
 b)
 i = 400
-    i = 0
+    i == 0
 i = 0
 
 c)
@@ -93,22 +99,23 @@ d)
 
 i = 0 
 
-i = 0
+    i == 0 -1 = -1
 
+i = 0
 
 e)
 
-r = 3 
+r == 3 
 
-     r < 0 
-        skip 
+    r < 0 
+        skip <- No toma la guarda
     r > 0 
-        r = 3 - 1   = 2
+        r = 3 -1 = 2 
     r > 0 
         r = 2 - 1 = 1 
     r > 0 
         r = 1 - 1 = 0 
-    // al ser 0, se rompe 
+    // al ser 0, se rompe ??? 
 
 r = 0 
 
@@ -137,7 +144,7 @@ a)
         fi
     od
 
-b) ? 
+b) sera asi?
 
     var i: Int; 
     O0 : (i →1) 
@@ -194,7 +201,6 @@ c)  i = 5
 ={Arimetica de 1 y caso 4}
     40
 
-
 Alt (me lo robe de los chikis)
 
 a) 
@@ -230,10 +236,6 @@ res, n ≔ 1 * 5; (5 - 1)
 	res, n ≔ (1 * 5) * (4 * 1) * (3 * 1);(3 - 1)
 
 	res, n ≔ (1 * 5) * (4 * 1) * (3 * 1) * (2 * 1); (2-1)
-
-
-
-
 
 ii- 
 const N : Int;
@@ -281,17 +283,161 @@ estado final: res = 120
 
 PASS, NO ENTENDI.
 
-https://chatgpt.com/share/66fd5eb5-e2a0-8009-8057-5681a0ce3637
+--8)
+i = -3, s = 5, a = [2,10,10,-1]
+
+    i, s == 0, 0
+
+    do 
+        i < 4 ->
+            s, i == s + a.i, i + 1<- Suma s a el elemento de a, y incrementa en uno.
+
+σ0	-3	5	[2, 10, 10, -1]
+σ′0	0	0	[2, 10, 10, -1]
+σ01	1	2	[2, 10, 10, -1]
+σ02	2	12	[2, 10, 10, -1]
+σ11	3	22	[2, 10, 10, -1]
+σ12	4	21	[2, 10, 10, -1]
+σ3	4	21	[2, 10, 10, -1]
+
+--b)
+
+i == 3, c == 12, a == [12, -9, 10, -1]
+
+    i, c == 0, 0
+
+    do 
+        i < 4 ->
+            if a.i > 0 ->
+                c = c + 1
+            fi
+            if a.i <= 0 ->
+                skip
+            fi
+            i = i + 1
+
+
+    i    c          a
+
+<--o0--> 
+σ0 : i = 3, c = 12, A = [12, -9, 10, -1] 
+
+<--o1--> con los indicies de c== c + 1
+
+σ0',   	0	0	[12, -9, 10, -1]
+
+σ′1 0,	0	0	[12, -9, 10, -1]
+
+σ′1 1,	0	0	[12, -9, 10, -1]
+
+σ′1 2,	0	0	[12, -9, 10, -1]
+
+σ′1 3,	0	0	[12, -9, 10, -1]
+
+<--o2-->
+
+σ′2 0,	0	1	[12, -9, 10, -1]
+
+σ′2 1,	0	1	[12, -9, 10, -1]
+
+σ′2 2,	0	2	[12, -9, 10, -1]
+
+σ′2 3,	0	2	[12, -9, 10, -1]
+
+<--o3-->
+
+σ′3 0,	1	2	[12, -9, 10, -1]
+
+σ′3 1,	2	2	[12, -9, 10, -1]
+
+σ′3 2,	3	2	[12, -9, 10, -1]
+
+σ′3 3,	4	2	[12, -9, 10, -1]
+
+<--o4-->
+
+σ′4,	4	2	[12, -9, 10, -1]
+
+no se si este bien
+
+--9)
+
+Const A : array[0,4) ofInt;
+Var i,s : Int;
+Jσ0 : (i →−3,s →5,A → [2 10 10 −1 )
+i,s := 0,0;
+σ′0
+do i < 4 →
+σ01,··· ,σ31
+s,i := s + A.i,i + 1
+σ02,··· ,σ32
+od
+sum A.i % lenght A
+σ3
+
+-b)
+if (i % 2 == 0) {
+            printf("%d ", arr[i]); 
+        }
+agrego eso de arriba
+
+--10)
+--a)
+    Const A : array[0,n) of Int;
+        a.i >= 0
+            [o01 o02 o03 o04]
+            sumi += a[i]
+        a.i mod 3 == 0
+            [o12 o12 o13 o14]
+            sum3 += a[i]
+    [o2]
+--b)
+    Const A : array[12, -9, 10, 0, -1) of Int;
+        a.i >= 0
+            [o00o01 o02 o03 o04]
+            sumi += a[i]
+        a.i mod 3 == 0
+            [o10 o11 o12 o13 o14]
+            sum3 += a[i]
+    [o2]
+
+o00,
+o01, 12
+o02,  12 
+o03,  12 + 10
+o04, 12 + 10 + 0
+o05, 12 + 10 + 0 = 22
+
+o10, 12
+o11, 12 - 9
+o12, 12 - 9 
+o13, 12 - 9
+o14, 12 - 9 = 3
+
+o2, 22, 3
+    
+--11)
+--a)
+Const A : array[0,n) of Int;
+Const B : array[0,m) of Int;
+
+    if a.i == b.i 
+        [o01 o02 o03 o04]
+        conteo += 1 
+    fi 
+     
+--b) q flojera, no se si hice bien. consultarlo.
 
 --12) Ternas de Hoare y Weakest precondition.
+
+hecho aca: 
 
 https://r9.whiteboardfox.com/93872386-7680-8941
 
 --13)
 
 a)
-si se refiere a el x := x * x si, por que se esta multiplicando el valor de x por si mismo para dar positivo.
-
+si se refiere a el x := x * x si, por que se esta multiplicando el valor de x por si mismo para dar positivo y q de true.
 b)
 
 1)
@@ -498,6 +644,6 @@ f)
 
 a)
 
-    si valida, es una sumatira de elementos hasta llegar al elemento N de la lista A
+    si valida, es una sumatoria de elementos hasta llegar al elemento N de la lista A
     
 */

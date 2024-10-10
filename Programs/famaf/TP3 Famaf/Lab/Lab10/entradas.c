@@ -3,7 +3,7 @@
 int pedir_entero (char name) {
 	int x;
 	
-	printf("Ingrese un valor \n");
+	printf("Ingrese un nombre para el valor \n");
 	scanf("%c \n", &name);
 	printf("Ingrese un numero \n");
 	scanf("%d \n", &x);
@@ -17,7 +17,6 @@ void imprimir_entero (int x, char name) {
 
 int main () {
 	int n;
-	
 	n = pedir_entero('n');
 	imprimir_entero( n, 'n');
 	

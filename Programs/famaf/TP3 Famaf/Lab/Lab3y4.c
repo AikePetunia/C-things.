@@ -26,10 +26,15 @@ int main() {
 
     //d 
 
+    //Implementacion en C:
+
     y, x = y + y, x + y;
 
     printf ("%d \n %d \n", x, y);
 
-    //comentar el que no se usara. no quiero llenar esa tabla deja d joder
+    //comentar el que no se usara. no quiero llenar esa tabla :)+
+
+    //chekiado
+    
     return 0;
 }

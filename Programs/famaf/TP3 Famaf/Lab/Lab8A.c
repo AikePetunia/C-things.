@@ -21,7 +21,7 @@ int main() {
     - `σ11: (x → 10, y → 3, i → 1)`
 
     - **Después de Iteración 2 (σ2):**
-    - `σ21: (x → , y → 3, i → 2)`
+    - `σ21: (x → 7, y → 3, i → 2)`
 
     - **Después de Iteración 3 (σ3):**
     - `σ31: (x → 4, y → 3, i → 3)`
@@ -39,6 +39,6 @@ int main() {
 
 */
 
-
+    // chekiado!
     return 0;
 }

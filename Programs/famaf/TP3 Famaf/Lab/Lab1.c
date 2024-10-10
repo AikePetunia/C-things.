@@ -20,12 +20,13 @@ int main () {
     resultado4 = y / 2 * x;
     resultado5 = y < x * z;
 
-    printf("El resultado1: %d\n", x, y, z, resultado1);
-    printf("El resultado2: %d\n", x, y, z, resultado2);
-    printf("El resultado3: %d\n", x, y, z, resultado3);
-    printf("El resultado4: %d\n", x, y, z, resultado4);
-    printf("El resultado5: %d\n", x, y, z, resultado5);
+    printf("El resultado1: %d\n", resultado1 );
+    printf("El resultado2: %d\n", resultado2 );
+    printf("El resultado3: %d\n", resultado3 );
+    printf("El resultado4: %d\n", resultado4 );
+    printf("El resultado5: %d\n", resultado5 );
 
+//Chekiado
 
     return 0;
 }

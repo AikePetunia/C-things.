@@ -9,17 +9,17 @@ int main() {
     scanf("%d", &y);
     printf("ingrese el valor de z: ");
     scanf("%d", &z);
-     printf("ingrese el valor de m: ");
+    printf("ingrese el valor de m: ");
     scanf("%d", &m);
 
     if (x < y) {
-        m = x;
+        m == x;
     } else if (x >= y ) {
-        m = y;
+        m == y;
     } else if ( m < z) {
-        // continue; / skip; 
+        // continue; // skip; HOW, que pongo aca?
     } else if ( m >= z) {
-        m = z;
+        m == z;
     }
 
     printf("El valor de m es: %d\n", m); 
@@ -30,6 +30,8 @@ int main() {
     ingrese el valor de m: 0
     El valor de m es: 4
     */
+
+   //chekiar codigo
 
     return 0;
 }
