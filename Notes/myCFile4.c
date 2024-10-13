@@ -102,6 +102,25 @@ int main() {
     printf("Comparación de n caracteres ignorando mayúsculas: %d\n", result4);
 
 
+    // Para acceder, por ejemplo, a elementos pares en una lista A, hago:
+   void imprimirElementosPares(int arr[], int longitud) {
+    printf("Elementos en posiciones pares:\n");
+    for (int i = 0; i < longitud; i++) {
+        if (i % 2 == 0) {
+            printf("%d ", arr[i]); // Imprime el elemento en posición par
+        }
+    }
+    printf("\n");
+    }
+
+int main() {
+    int arr[] = {10, 20, 30, 40, 50, 60, 70};
+    int longitud = sizeof(arr) / sizeof(arr[0]); // Calcula el tamaño de la lista
+
+    imprimirElementosPares(arr, longitud);
+
+    return 0;
+    }
     // FOR LOOPS
     // hasta que se llegue a una condicion
     for (int i = 1; i<=10; i++ ) //alternativamente i
@@ -145,9 +164,6 @@ int main() {
     } while (number3 > 0);
 
     printf("sum: %d", sum);
-
-
-
 
     //nested loops -> loop en un loop (raiz de loop)
 

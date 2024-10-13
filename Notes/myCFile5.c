@@ -102,5 +102,38 @@ int main () {
         printf("\nnoesfindesemana");
     }
 
+    /*
+    Un arreglo o vector (en inglés, array) es una estructura de datos que permite almacenar una colección de elementos del mismo tipo.
+    En general, un arreglo se declara de la siguiente manera:
+    
+    tipo nombreArreglo[tamaño];
+    
+    donde 'tipo' indica el tipo de los elementos del arreglo y 'tamaño' es la cantidad de elementos que el arreglo puede contener.
+    Por ejemplo:
+    
+    int numeros[4];  // declara un arreglo de 4 elementos de tipo entero.
+    bool flags[2];   // declara un arreglo de 2 elementos de tipo booleano.
+    
+    La cantidad de elementos de un arreglo es igual al valor especificado en 'tamaño'. 
+    Es posible declarar arreglos vacíos, aunque no es común en C.
+    
+    No es necesario que el primer índice del arreglo sea 0, pero en C, los arreglos siempre comienzan en el índice 0.
+    Un elemento de un arreglo se referencia por su índice, por ejemplo:
+    
+    numeros[0] = 10; // asigna el valor 10 al primer elemento del arreglo 'numeros'.
+    
+    Diremos que un valor 'v' está en el arreglo si algún elemento del arreglo es igual a 'v'.
+    
+    Es posible usar variables cuantificadas en relación a arreglos.
+    Por ejemplo, si tenemos un arreglo de enteros 'a' de tamaño 'n', podemos encontrar el máximo elemento del arreglo con:
+    
+    int max = a[0];
+    for (int i = 1; i < n; i++) {
+        if (a[i] > max) {
+            max = a[i];
+        }
+    }
+    */
+
     return 0;
 }

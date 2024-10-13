@@ -3,6 +3,38 @@
 #include <math.h>
 
 int main() {
+
+    /* Arreglos, Arrays
+    Los arreglos (arrays en inglés) permiten almacenar vectores y matrices. 
+    Los arreglos unidimensionales sirven para representar vectores 
+    Los arreglos bidimensionales para matrices de dos dimensiones.
+
+    Cuándo se utilizan:
+    Es un tipo abstracto de datos que es adecuado para situaciones en las que el acceso a los datos se realice de forma aleatoria e impredecible.
+    En caso contrario, cuando los elementos pueden estar ordenados y se va a utilizar acceso secuencial sería más adecuado utilizar una lista.
+    Se pueden representar matrices n-dimensionales.
+
+    Declaracion de arreglos:
+
+    Para declarar un arreglo en el lenguaje "C" se utiliza la siguiente instrucción:
+
+    int a[5];
+
+    NOTA: esta instrucción declara un arreglo de 5 elementos con índices de 0 a 4 .
+
+    Para inicializarlos:
+
+    Para inicializar o asignarle valor al segundo elemento del arreglo definido previamente se utiliza la siguiente instrucción:
+
+    a[1] = 10;
+
+    Lectura:
+
+    Para leer el segundo elemento del arreglo definido previamente se utiliza la siguiente instrucción:
+
+    x = a[1];
+
+    */
     
     //User inputs 
 
