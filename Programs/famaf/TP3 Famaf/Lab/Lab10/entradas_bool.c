@@ -2,12 +2,9 @@
 #include <stdbool.h>
 
 bool pedir_booleano(char name) {
-    bool x;
-    printf("ingrese un caracter para la caribale");
-    scanf(" %c", &name);
+    int x; // es int y no bool, por que se manejan numeros y despues un estado de bool. No un estado de bool-bool.
     printf("Ingrese un valor para la variable %c (1 para verdadero, 0 para falso): ", name);
     scanf("%d", &x);  
-
     if (x != 0 && x != 1) {
         printf("El valor ingresado no es valido. Por favor ingrese 1 o 0\n");
         scanf("%d", &x);
@@ -17,11 +14,11 @@ bool pedir_booleano(char name) {
 }
 
 void imprimir_booleano(bool x, char name) {
-    printf("La variable %c tiene el valor ", name);
+    printf("La variable %c tiene el valor booleano: ", name);
     if (x == 0) {
-        printf("falso\n");
+        printf("False\n");
     } else {
-        printf("verdadero\n");
+        printf("True\n");
     }
 }
 
