@@ -29,6 +29,3 @@ int main() {
     imprimir_booleano(x, name);
     return 0;
 }
-
-
-//da un segmentaion fault raro?
