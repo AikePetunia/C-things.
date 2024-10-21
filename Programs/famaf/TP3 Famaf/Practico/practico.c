@@ -3,12 +3,12 @@
 -1)
 
 a) Var x : Int;
-    σ0 : (x →1)
+    σ0 : (x ->1)
 x := 5
     σ1 : 5
 
 b)Var x,y : Int;
-    σ0 : (x →2,y →5)
+    σ0 : (x ->2,y ->5)
 x := x + y;
     σ1 : 7
 y := y + y
@@ -16,7 +16,7 @@ y := y + y
 
 c)
 Var x,y : Int;
-    σ0 : (x →2,y →5)
+    σ0 : (x ->2,y ->5)
 y := y + y;
     σ1 : 10
 x := x + y
@@ -26,7 +26,7 @@ x := x + y
 d)
 
 Var x,y : Int;
-    σ0 : (x →2,y →5)
+    σ0 : (x ->2,y ->5)
 y,x := y + y,x + y
     σ1 : 10, 7
 
@@ -126,48 +126,45 @@ No, no existe un predicado que pueda hacer que `i < 0`, `i = 0` y `i > 0` al mis
 7)
 
 a)
-    var i: Int; 
-    O0 : (i →1) 
+    Var I, res : Int;
     do i >= 0
-        [          ]
-        if i = 0 
+        if
+            i := 0;
             [          ]
-                i = 1 
         fi 
         if i = 1 
             [          ]
-                i = 1 
+            i = 1;
         fi 
         if i > 1  
             [          ]
-                i * i - 1  
+            res, n ≔ res * n, n-1; 
         fi
     od
 
-b) sera asi?
+b) 
 
-    var i: Int; 
-    O0 : (i →1) 
+    const N : Int;
+    Var n, res : Int;
     do i >= 0
-        if i > 1  
+        if
+            i := 0;
             [          ]
-                i * i - 1  
-        fi
-        [          ]
-        if i = 0 
-            [          ]
-                i = 1 
         fi 
         if i = 1 
             [          ]
-                i = 1 
+            i = 1;
         fi 
-        
+        if i <= N   
+            [          ]
+            res, n ≔ res * n, n+1; 
+        fi
     od
+
 
 c)  i = 5
 
-    O0 : (i →5) 
+    O0 : (i ->5) 
     do i >= 0                   --1
         if i > 1                     --2 
             [          ]
@@ -209,14 +206,14 @@ Var N : Int
 
 Var n, res : Int;
 n, res ≔ N, 1;
-do n>1 →
+do n>1 ->
      res, n ≔ res * n; n -1
 od 
 7b)
 const N : Int;
 Var n, res : Int;
 n, res ≔ 1, 1;
-do n<N →
+do n<N ->
      res ≔ res * n * (n+1);
      n ≔ n+2;
 od
@@ -228,7 +225,7 @@ i- (N >= 0) que calcule N!
 Var n, res : Int;
 n, res ≔ N, 1;
 n, res ≔ 5, 1;
-do n>1 →
+do n>1 ->
 res, n ≔ res * n; (n - 1)
 res, n ≔ 1 * 5; (5 - 1)
 	res, n ≔ (1 * 5) * (4 * 1); (4-1)
@@ -241,37 +238,37 @@ ii-
 const N : Int;
 Var n, res : Int;
 n, res ≔ 1, 1;
-do n<= N →
+do n<= N ->
      res ≔ res * n;
      n ≔ n+1;
 od
 N = 5;
 primera iteración:
-do 1 <= 5 →
+do 1 <= 5 ->
      res ≔ 1 * 1;
      n ≔ 1+1;
 od
 resultado: res = 1; n = 2
 segunda iteración:
-do 2 <= 5 →
+do 2 <= 5 ->
      res ≔ 1 * 2;
      n ≔ 2+1;
 od
 resultado: res = 2; n = 3
 tercera iteración:
-do 3 <= 5 →
+do 3 <= 5 ->
      res ≔ 2 * 3;
      n ≔ 3+1;
 od
 resultado: res = 6; n = 4
 cuarta iteración:
-do 4 <= 5 →
+do 4 <= 5 ->
      res ≔ 6 * 4;
      n ≔ 4+1;
 od
 resultado: res = 24; n = 5
 quinta iteración:
-do 5 <= 5 →
+do 5 <= 5 ->
      res ≔ 24 * 5;
      n ≔ 5+1;
 od
@@ -364,10 +361,10 @@ no se si este bien
 
 Const A : array[0,4) ofInt;
 Var i,s : Int;
-Jσ0 : (i →−3,s →5,A → [2 10 10 −1 )
+Jσ0 : (i ->−3,s ->5,A -> [2 10 10 −1 )
 i,s := 0,0;
 σ′0
-do i < 4 →
+do i < 4 ->
 σ01,··· ,σ31
 s,i := s + A.i,i + 1
 σ02,··· ,σ32
@@ -440,6 +437,14 @@ a)
 si se refiere a el x := x * x si, por que se esta multiplicando el valor de x por si mismo para dar positivo y q de true.
 b)
 
+Tengamos en cuenta esto antes para todo wp:
+
+{ p } s { q } <-> p => wp.s.q 
+
+Además.
+    Skip: Si p ==> q 
+    Asignacion:
+        Como se desarrolla en los ejercicios.
 1)
 
         wp.S.Q
@@ -526,7 +531,11 @@ Especificación correcta para max:
 ={ Definicion de wp por asignacion }
     wp.(x := x + y).(x = 6 ^ y = 5)
 ={Asignacion}
-    x + y = 6 ^ y x + y = 5
+    x + y = 6 ^ y = 5
+={Leibniz}
+    x + 5 = 6 ^ y = 5
+={Aritmetica}
+    x = 1 ^ y = 5
 
 b)
     
@@ -545,19 +554,18 @@ c)
         wp.(x:=8).(x = 7)
     ={Asignacion}
         8 = 7
-    ={Logica}+
+    ={Logica}
         False 
 
 d)
     
-            wp.S.Q
-        ={Definicion de wp por asignacion}
-            wp.(x, y = y, x).(x = B ^ y = A)
-        ={Asignacion}
-            x, y = B, ^ y, x = A
-        ={Logica}
+        wp.S.Q
+    ={Definicion de wp por asignacion}
+        wp.(x, y = y, x).(x = B ^ y = A)
+    ={Asignacion}
+        y = B, ^ x = A
+    ={Logica}
             
-
 Es de este estilo:
 
 Ejemplo 1: “Swap” (intercambio de valores):
@@ -572,78 +580,544 @@ Ejemplo 1: “Swap” (intercambio de valores):
 Si empezamos en un estado que satisface P, ¿al ejecutar S terminamos en un estado que satisface Q? ¡Si! Siempre.
 
 e)
+    Var x,y,a : Num;
+    { }
+    a,x := x,y;
+    { }
+    y := a
+    {x = B ∧ y = A}
 
-        wp.S.Q
-    ={Definicion de wp por asignacion}
-        wp.(a,x := x, y).(x = B ^ y = A)
+    Dado:
+        { P } S; T { Q } == Existe R tq { P } S { R } T { Q }
+        wp.(S;T).Q
+    ={Definicion de wp por secuenciacion.}
+        wp.S.(wp.T.Q)
+    ={Por digesto, secuenciacion}
+        wp.(a,x := x,y).wp.(y := a).(x = B ^ y = A)
     ={Asignacion}
-        x, y
-    ={Logica}
-        False
-
-f)
-
-        wp.S.Q
-    ={Definicion de wp por asignacion}
-        wp.(x >= y v x <= y).((x = 0 v x = 2) ^ y = 1)
-    ={Distributividad de v con ^}
-        wp.(x >= y v x <= y).((x = 0 ^ y = 1 )v (x = 2 ^ y = 1))
-    ={Hago dos casos, uno para x >= y (1), otro para x <= y (2)}
+        wp.(a,x := x,y).(x = B ^ a = A)
+    ={Reemplazo}
+        (y = B ^ x = A)
         
-    (1)
-        wp.(x := 0).((0 = 0 ^ y = 1 )v (0 = 2 ^ y = 1))
-    ={Asignacion}
-        (true ^ 1 = 1 )v (False ^ 1 = 1)
+        
+f)
+    Var x,y : Num;
+    { }
+    if x ≥y ->
+    { }
+    x := 0
+    { }
+    x ≤y ->
+    { }
+    x := 2
+    { }
+    fi
+    {(x = 0 ∨x = 2) ∧ y = 1}
+
+    Por digesto, el condicional:
+
+    { P } if B1 ->S1 {Q} ≡ P ->(B1 ∨B2 ∨. . . ∨Bn)
+        2B2 ->S2              ∧{B1 ∧P } S1 {Q}
+        ...                  ∧{B2 ∧P } S2 {Q}
+        2Bn->Sn               ..
+        .                    ..
+        fi                   ∧{Bn∧P } Sn{Q}
+
+    wp.(if . . . fi).Q  ≡ (B1 ∨ B2 ∨. . . ∨Bn)
+                            ∧(B1 ->wp.S1.Q)
+                            ∧(B2 ->wp.S2.Q)
+                            ...
+                            ∧(Bn->wp.Sn.Q)
+
+    Entonces:
+
+            (x ≥ y v x <= y) ^
+        (x >= y -> wp.(x := 0).(x = 0 ∨x = 2) ∧ y = 1) ^ 
+        (x <= y -> wp.(x := 2).(x = 0 ∨x = 2) ∧ y = 1)
+    ={Por digesto}
+            (True)  ^
+        (x >= y -> (x := 0).(x = 0 ∨ x = 2) ∧ y = 1) ^ 
+        (x <= y -> (x := 2).(x = 0 ∨ x = 2) ∧ y = 1)
+    ={Neutro conjuncion y reemplazo}
+        (True)
+    ∧(x ≥ y -> ((x = 0 ∨ x = 2) ∧ y = 1)(x <- >0)
+    ∧(x ≤ y -> ((x = 0 ∨ x = 2) ∧ y = 1)(x <- >2)
+    ={Por digesto, wp de asignacion}
+            (True) ^
+        (x >= y -> (0 = 0 ∨ x = 2) ∧ y = 1) ^ 
+        (x <= y -> (0 = 0 ∨ x = 2) ∧ y = 1)
     ={Logica}
-        true v false
-    ={logica}
-        True 
+            (True) ^
+        (x >= y -> (True ∨ 0 = 2) ∧ y = 1) ^ 
+        (x <= y -> (False ∨ 2 = 2) ∧ y = 1)
+    ={Logica}
+            (True) ^
+        (x >= y -> (True ∨ False) ∧ y = 1) ^ 
+        (x <= y -> (False ∨ True) ∧ y = 1)
+    ={Logica}
+            (True) ^
+        (x >= y -> True ∧ y = 1) ^ 
+        (x <= y -> True ∧ y = 1)
+    ={Logica}
+            (True) ^
+        (x >= y -> y = 1) ^
+        (x <= y -> y = 1)
+    ={Logica}
+            (True) ^
+        (x >= y v x <= y -> y = 1)
+    ={Logica}
+            (True) ^ True -> y = 1
+    ={Logica}
+            True -> y = 1
+
+    Quedando:
+    {y = 1}
+    if x ≥y ->
+        {y = 1}
+        x := 0
+      {(x = 0 ∨x = 2) ∧y = 1}
+    []x ≤y ->
+        {y = 1}
+        x := 2
+        {(x = 0 ∨x = 2) ∧ y = 1}
+    {(x = 0 ∨x = 2) ∧ y = 1}
+
+--15)
+
+    {True}
+        if x ≥1 →x := x + 1
+            x ≤1 →x := x −1
+        fi
+    {x ̸= 1}
+
+    Por digesto, el condicional:
+
+    { P } if B1 ->S1 {Q} ≡ P ->(B1 ∨B2 ∨. . . ∨Bn)
+        2B2 ->S2              ∧{B1 ∧P } S1 {Q}
+        ...                  ∧{B2 ∧P } S2 {Q}
+        2Bn->Sn               ..
+        .                    ..
+        fi                   ∧{Bn∧P } Sn{Q}
+
+    wp.(if . . . fi).Q  ≡ (B1 ∨ B2 ∨. . . ∨Bn)
+                            ∧(B1 ->wp.S1.Q)
+                            ∧(B2 ->wp.S2.Q)
+                            ...
+                            ∧(Bn->wp.Sn.Q)
+
+    Entonces:
     
-    (2)
-        wp.(x := 2).((x = 0 ^ y = 1 )v (x = 2 ^ y = 1))
-    ={Asignacion}
-        ((2 = 0 ^ y = 1 )v (2 = 2 ^ y = 1))
+        wp.(if..fi).(x /= 1)
+    ={Def. Wp if}
+        (x ≥ 1 v x ≤ 1) ^
+        (x ≥ 1 -> wp.(x := x + 1).(x ̸= 1) ^ 
+        (x ≤ 1 -> wp.(x := x - 1).(x ̸= 1)
+    ={Eliminacion wp y logica}
+        (True) ^
+        (x ≥ 1 -> wp.(x := x + 1).(x ̸= 1) ^ 
+        (x ≤ 1 -> wp.(x := x - 1).(x ̸= 1)
+    ={Neutro de ^}
+        (x ≥ 1 -> wp.(x := x + 1).(x ̸= 1) ^ 
+        (x ≤ 1 -> wp.(x := x - 1).(x ̸= 1)
+    ={Por digesto de ;}
+        (x ≥ 1 -> (x ̸= 1)(x <- x + 1) ^ 
+        (x ≤ 1 -> (x ̸= 1)(x <- x - 1)
+    ={reemplazo}
+        (x ≥ 1 -> (x + 1 ̸= 1) ^ 
+        (x ≤ 1 -> (x - 1 ̸= 1)
     ={Logica}
-        (False ^ 1 = 1 )v (True ^ 1 = 1)
-    ={Logica}
-        False v True
+        True ^ True
     ={Logica}
         True
 
 
---15)
+    b)
 
-a)
+            {x ̸= y}
+        if    x > y →skip
+              x < y →x,y := y,x
+        fi
+        {x > y}
 
-    Es true, pues la precondicion dice que es verdadero, pero la post condicion no se cumpliria para x =  1 si toma x - 1
+        
 
-b)
-    Es true, pues por swap se cumplira la primera guarda si es q no se cumplio
+        Por digesto, el condicional:
 
-c)
+    { P } if B1 ->S1 {Q} ≡ P ->(B1 ∨B2 ∨. . . ∨Bn)
+        2B2 ->S2              ∧{B1 ∧P } S1 {Q}
+        ...                  ∧{B2 ∧P } S2 {Q}
+        2Bn->Sn               ..
+        .                    ..
+        fi                   ∧{Bn∧P } Sn{Q}
 
-    si el s nos condicion a q sera valido. notemos que duplica el valor de x, teniendo que ser siempre mayor a un negativo.
-    ademas, se asegura que el mas grande sea restado por el mas pequeño, manteineod siempre una resta de un positivo por un negativo, cumpliendo.
-    pero, tienen que cumoplirse ambos al mism otiempo
+    wp.(if . . . fi).Q  ≡ (B1 ∨ B2 ∨. . . ∨Bn)
+                            ∧(B1 ->wp.S1.Q)
+                            ∧(B2 ->wp.S2.Q)
+                            ...
+                            ∧(Bn->wp.Sn.Q)
 
-d)
+    Entonces:
 
-    Es por tabla de la verdad de v. 
-    El unico que no se cumpliria seria para no b y no a.
+        wp.(if..fi).(x > y)
+    ={Por digesto de wp}
+        (x > y v x < y) ^
+        (x > y -> wp.skip.(x > y)) ^
+        (x < y -> wp.(x,y := y,x).(x > y))
+    ={Logica}
+        True ^ 
+        (x > y -> wp.skip.(x > y)) ^
+        (x < y -> wp.(x,y := y,x).(x > y))
+    ={Abs. True. Digesto de skip. Borro wp.}
+        (x > y -> (x > y)) ^
+        (x < y -> (x,y := y,x).(x > y))
+    ={wp de asignacion}
+        (x > y -> (x > y)) ^
+        (x < y -> (x > y)( x <- y, y <- x))
+    ={Asignacion}
+        (x > y -> (x > y) ^
+        (x < y -> (y > x)
+    ={Logica}
+        True ^ True
+    ={Logica}
+        True
 
-e) 
+    Concluimos:
 
-    Es un cconteno desde el 0 hasta que alcance el valro de n. sera true cuando se alcance x = n
+        P -> wp.(if..fi).(x > y)
+        ≡{Reemplazamos P y la wp del if}
+        x = y ->(x > y ∨ x < y)
+        ≡{Logica}
+        True
 
-f)
+    c)
 
-    no funciona, pues n no aparece en la postcondicion.
+    {True}
+        x,y := y ∗y,x ∗x;
+        if x ≥y →x := x −y
+           x ≤y →y := y −x
+        fi
+    {x ≥0 ∧y ≥0}
 
+        
+    Por digesto, el condicional:
+
+    { P } if B1 ->S1 {Q} ≡ P ->(B1 ∨B2 ∨. . . ∨Bn)
+        2B2 ->S2              ∧{B1 ∧P } S1 {Q}
+        ...                  ∧{B2 ∧P } S2 {Q}
+        2Bn->Sn               ..
+        .                    ..
+        fi                   ∧{Bn∧P } Sn{Q}
+
+    wp.(if . . . fi).Q  ≡ (B1 ∨ B2 ∨. . . ∨Bn)
+                            ∧(B1 ->wp.S1.Q)
+                            ∧(B2 ->wp.S2.Q)
+                            ...
+                            ∧(Bn->wp.Sn.Q)
+
+    Entonces:
+
+        wp.(if..fi).(x >= y ^ y >= 0)
+    ={Por digesto de wp y logica en P}
+        (x >= y v x <= y) ^
+        (x >= y -> wp.(x := x - y).(x >= 0 ^ y >= 0)) ^
+        (x < y -> wp.(y := y - x).(x >= 0 ^ y >= 0))
+    ={logica, borro wp}
+        (True) ^
+        (x >= y -> (x := x - y)(x >= 0 ^ y >= 0)) ^
+        (x < y -> (y := y - x).(y >= 0 ^ x >= 0))
+    ={Neutro de ^}
+        (x >= y -> (x := x - y).(x >= 0 ^ y >= 0)) ^
+        (x < y -> (y := y - x).(y >= 0 ^ x >= 0))
+    ={Asignacion de wp digesto}
+        (x >= y -> (x >= 0 ^ y >= 0)( x <- x - y)) ^
+        (x < y -> (y >= 0 ^ x >= 0)( y <- y - x))
+    ={Asignacion}
+        (x >= y -> (x - y >= 0 ^ y >= 0)) ^
+        (x < y -> (y - x >= 0 ^ x >= 0))
+    ={Aritmetica}
+        (x >= y -> (x >= y ^ y >= 0)) ^
+        (x < y -> (y >= x ^ x >= 0))
+    ={Aritmetica}
+        (x >= y -> (x >= y ^ y >= 0)) ^
+        (x < y -> (y >= x ^ x <= y))
+    ≡{P -> P ∧Q ≡P -> Q}
+        (x ≥ y -> y ≥ 0) ∧(x ≤ y -> x ≥ 0)
+    ={Transitividad}
+        (x ≥y -> (x ≥0 ∧y ≥0)) ∧(x ≤y -> (x ≥0 ∧y ≥0))
+    ≡{Distributividad izquierda implicacion disyuncion}
+        (x ≥y ∨x ≤y -> (x ≥0 ∧y ≥0))
+    ≡{Logica}
+        (True -> (x ≥0 ∧y ≥0))
+    ≡{Logica}
+        (x ≥0 ∧y ≥0)
+    
+    Por lo cual nos queda lo siguiente:
+        wp.(x, y := y ∗y, x ∗x).(wp.(if..f i).(x ≥0 ∧y ≥0))
+        ≡{wp if calculado previamente}
+        wp.(x, y := y ∗y, x ∗x).(x ≥0 ∧y ≥0)
+        ≡{Def wp asignacion}
+        (x ≥0 ∧y ≥0)(x <- >y ∗y, y <- x ∗x)
+        ≡{Reemplazamos}
+        (y ∗y ≥0 ∧x ∗x ≥0)
+        ≡{Logica}
+        T rue
+
+        Finalmente:
+        P ⇒wp.(x, y := y ∗y, x ∗x).(wp.(if..f i).(x ≥0 ∧y ≥0))
+        ≡{Reemplazamos por los resultados obtenidos previamente}
+        P ⇒wp.(x, y := y ∗y, x ∗x).(x ≥0 ∧y ≥0)
+        ≡{Reemplazamos por los resultados obtenidos previamente}
+        P ⇒T rue
+        ≡{Reemplazamos P}
+        T rue ⇒T rue
+        ≡{Logica}
+        T rue
 
 --16)
 
 a)
 
     si valida, es una sumatoria de elementos hasta llegar al elemento N de la lista A
-    
+
+
+  ¡En lenguaje C, no existe la asignación múltiple!
+Debemos tener cuidado cómo traducimos para que se respete la semántica del programa,. Es decir, tengan estados equivalentes (el valor de las variables sean los mismos).
+OJO, ASIGNACION, NO DE VALOR.  
+
+b)
+
+SUmatoria de k elementos hasta el N de la lista tal que el ultimo elemento sea k.
+
+c)
+
+    Si i no es el ultimo elemento de la lista, que siga buscando serlos mientras se suma un s a la lista del indice i.
+d)
+Si existe un elemento (Ak) del arreglo que sea igual a E entonces el elemento (Ai) es igual a E.
+
+Ej extra
+
+--17) 
+a) {P} x := 8 {x = 8}
+
+    wp.S.Q
+={Definicion de WP por asignacion}
+    wp.(x := 8).(x = 8)
+={Asignacion}
+    8 = 8
+={Logica}
+    True 
+
+b)
+{P} x := 8 {x ̸= 8}
+
+    wp.S.Q
+={Definicion de WP por asignacion}
+    wp.(x := 8).(x ̸= 8)
+={Asginacion}
+    8 ̸= 8
+={Logica}
+    False
+
+c)
+
+{P} x := 9 {x = 7}
+
+    wp.S.Q
+={Definicion de WP por asignacion}
+    wp.(x := 9).(x = 7)
+={Asignacion}
+    9 = 7
+={Logiac}
+    False +
+
+d)
+{P} x := x + 1; y := y −2 {x + y = 0} => Queda:
+
+{P} x := x + 1 {x + y = 0} ^
+{P} y := y −2 {x + y = 0} 
+
+entonces
+{P} x := x + 1 {x + y = 0} ≡ {P} y := y −2 {x + y = 0} 
+
+    wp.S.Q
+={Definicion por asignacion}
+   wp.S.(wp.T.Q)
+={Secuenciacion}
+    wp.(x := x + 1).(wp.(y := y −2).(x + y = 0))
+={Asignacion}
+    wp.(x := x + 1).(y − 2 + x = 0)
+={Asignacion}
+    (x + 1) + y − 2 = 0
+
+e)
+{P} x := x + 1; y := y −1 {x ∗y = 0} => Queda:
+
+wp.(S ; T).Q ≡ wp.S.(wp.T.Q)
+
+{P} x := x + 1 {x ∗ y = 0} ^
+{P} y := y −1 {x ∗ y = 0}
+
+    wp.S.Q
+={definicion por asignacion}
+    wp.S.(wp.T.Q)
+={secuenciacion}
+    wp.(x := x + 1).(wp.(y := y −1).(x ∗ y = 0))
+={Asignacion}
+    wp.(x := x + 1).(y − 1 = 0)
+={Asignacion}
+    (x + 1) ∗ (y − 1) = 0 ?????
+
+
+f)
+{P} x := x + 1; y := y −1 {x + y + 10 = 0} => Queda
+
+wp.(S ; T).Q ≡ wp.S.(wp.T.Q)
+
+{P} x := x + 1 {x + y + 10 = 0} ^
+{P} y := y −1 {x + y + 10 = 0}
+
+    wp.S.Q
+={definicion por asignacion}
+    wp.S.(wp.T.Q)
+={secuenciacion}
+    wp.(x := x + 1).(wp.(y := y −1).(x + y + 10 = 0))
+={Asignacion}
+    wp.(x := x + 1).(y − 1 + x + 10 = 0)
+={Asignacion}
+    (x + 1) + y − 1 + x + 10 = 0
+={Aritmetica}
+    2x + y + 10 = 0
+
+
+g)
+
+{P} z := z ∗y; x := x −1 {z ∗y^x = C} => Queda
+
+wp.(S ; T).Q ≡ wp.S.(wp.T.Q)
+
+{P} z := z ∗y {z ∗y^x = C}  ^
+{P} x := x −1 {z ∗yx = C}
+
+    wp.S.Q
+={Secuenciacion}
+    wp.S.(wp.T.Q)
+={definicion por asignacion}
+    wp.(z := z ∗y).(wp.(x := x −1).(z ∗y^x = C))
+={Asignacion}
+    wp.(z := z ∗y).(z * y^(x − 1) = C)
+={Asignacion}
+    z * y^(x − 1) = C   
+
+h)
+{P} x,y,z := 1,d,c {x ∗x^y = c^d} 
+
+    wp.S.Q
+={definicion por asignacion }
+    wp.(x,y,z := 1,d,c).(x ∗x^y = c^d)
+={Asignacion}
+    (x,y,z := 1,d,c).(x ∗x^y = c^d)
+={Asignacion}
+    (x,y,z := 1,d,c).(1 ∗1^d = c^d)
+={Aritmetica}
+    (1^(d+1) = c^d)
+
+Bool, depende de q valor tenga c y d 
+
+i)
+
+{P} i,j := i + i,j; j := j + i {i = j} => Queda
+
+{P} i,j := i + i,j {i = j} ^
+{P} j := j + i {i = j} 
+
+wp.(S ; T).Q ≡ wp.S.(wp.T.Q)
+
+    wp.S.Q
+={definicion por asignacion}
+    wp.S.(wp.T.Q)
+={secuenciacion}
+    wp.(i,j := i + i,j).(wp.(j := j + i).(i = j))
+={Asignacion}    
+    wp.(i,j := i + i,j).(i = j + i)
+={Asignacion}
+    (i + i = j + i)
+
+
+j)
+
+{P} x := (x −y) ∗(x + y) {x + y^2 = 0} 
+        
+    wp.S.Q
+={ASignacion}
+    wp.(x := (x − y) ∗(x + y)).(x + y^2 = 0)
+={Asignacion}
+    ((x - y) * (x + y)) + y^2 = 0
+
+
+k)
+{P} q,r := q + 1,r −y {q ∗y + r = x}
+
+    wp.S.Q
+={Asignacion}
+    wp.(q,r := q + 1,r −y).(q ∗y + r = x)
+={Asignacion}
+    (q + 1) * y + (r - y) = x
+
+l)
+
+{P} a := a ≡b; b := a ≡b; a := a ≡b {(a ≡ B) ∧ (b ≡ A)} => Queda
+
+{P} a := a ≡ b {a ≡ B) ∧ (b ≡ A)} ^
+{P} b := a ≡ b {a ≡ B) ∧ (b ≡ A)} ^
+{P} a := a ≡ b {a ≡ B) ∧ (b ≡ A)}
+
+wp.(S ; T ; R).Q ≡ wp.S.(wp.T.(wp.R.Q))
+
+    wp.S.Q
+={Secuenciacion}
+    wp.S.(wp.R.(wp.T.Q))
+={Asignacion}
+    wp.(a := a ≡ b).(wp.(b := a ≡ b).(wp.(a := a ≡ b).((a ≡ B) ∧ (b ≡ A)))
+={Asignacion}
+    wp.(a := a ≡ b).(wp.(b := a ≡ b).((a ≡ b) ≡ B) ∧ (b ≡ A))
+={Asignacion}
+    wp.((a := a ≡ b).(a ≡ b) ≡ B)^  ((a ≡ b) ≡ A))
+={asignacion}
+    ((a ≡ b) ≡ b) ≡ B) ∧ (((a ≡ b) ≡ b) ≡ A))
+
+(Dudo que este bien)
+
+18) no entiendo como verificar ternas de hoare, en todo caso:
+
+Tenemos en a):
+
+if
+    Guarda 0) B0 -> S0  // Que si B0 es verdadero, implica que S0 es verdadero
+    Guarda 1) B1 -> S1  // Que si B1 es verdadero, implica que S1 es verdadero
+fi
+Que para que la terna funcione, se debe dar la preocondicion P, tiene que terminar verdadero en alguno de los dos casos.
+
+Y en b):
+
+if
+    Guarda 0) B0 -> S0  // Que si B0 es verdadero, implica que S0 es verdadero
+    Guarda 1) -B0 -> S1  // Que si B1 es verdadero, implica que S1 es verdadero
+fi
+
+es de suponer que todo lo que no es en universo 0, es en universo 1. Por lo tanto implicaria que -b0 == b1
+por lo tanto, el programa deberia de dar true, ya que o bien se da algo que sea b0 implicara s0, y lo que no sea b0 implicara s1.
+
+notemos que en ambas ternas, existe la guarda:
+        Guarda 0) B0 -> S0  // Que si B0 es verdadero, implica que S0 es verdadero
+
+Entonces el comportamiento es equivalente. 
+
+Quiza la utilidad que tenga en c es para ahorrar tiempo en hacer casos para cada lo que no es b0.
+
+19)
+
+Notas:
+Checkear el wp del if con el digesto.
+
+
 */
