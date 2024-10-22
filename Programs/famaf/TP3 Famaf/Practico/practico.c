@@ -863,16 +863,167 @@ f)
         T rue
 
         Finalmente:
-        P ⇒wp.(x, y := y ∗y, x ∗x).(wp.(if..f i).(x ≥0 ∧y ≥0))
+        P -> wp.(x, y := y ∗y, x ∗x).(wp.(if..f i).(x ≥0 ∧y ≥0))
         ≡{Reemplazamos por los resultados obtenidos previamente}
-        P ⇒wp.(x, y := y ∗y, x ∗x).(x ≥0 ∧y ≥0)
+        P -> wp.(x, y := y ∗y, x ∗x).(x ≥0 ∧y ≥0)
         ≡{Reemplazamos por los resultados obtenidos previamente}
-        P ⇒T rue
+        P -> T rue
         ≡{Reemplazamos P}
-        T rue ⇒T rue
+        True -> True
         ≡{Logica}
-        T rue
+        True
 
+
+    d)
+
+    {True}
+    if ¬a ∨b →a := ¬a
+    a ∨¬b →b := ¬b
+    fi
+    {a ∨ b}
+
+        Por digesto, el condicional:
+
+    { P } if B1 ->S1 {Q} ≡ P ->(B1 ∨B2 ∨. . . ∨Bn)
+        2B2 ->S2              ∧{B1 ∧P } S1 {Q}
+        ...                  ∧{B2 ∧P } S2 {Q}
+        2Bn->Sn               ..
+        .                    ..
+        fi                   ∧{Bn∧P } Sn{Q}
+
+    wp.(if . . . fi).Q  ≡ (B1 ∨ B2 ∨. . . ∨Bn)
+                            ∧(B1 ->wp.S1.Q)
+                            ∧(B2 ->wp.S2.Q)
+                            ...
+                            ∧(Bn->wp.Sn.Q)
+
+
+    Entonces:
+
+        wp.(if..fi).(a ∨ b)
+    ={Asignacion}
+        (-a v b v a v -b) ^
+        (¬a ∨ b -> wp.(a := -a).(a ∨ b)) ^
+        (a ∨ ¬b -> wp.(b := -b).(a ∨ b))
+    ={Logica}
+        (True) ^
+        (¬a ∨ b -> wp.(a := -a).(a ∨ b)) ^
+        (a ∨ ¬b -> wp.(b := -b).(a ∨ b))
+    ={Absorbente de ^}
+        (¬a ∨ b -> wp.(a := -a).(a ∨ b)) ^
+        (a ∨ ¬b -> wp.(b := -b).(a ∨ b))
+    ={wp de asignacion}
+        (¬a ∨ b -> (a ∨ b)(a <- -a)) ^
+        (a ∨ ¬b -> (a ∨ b)(b <- -b))
+    ={Asignacion}
+        (¬a ∨ b -> (-a ∨ b)) ^
+        (a ∨ ¬b -> (a ∨ -b))
+    ={Logica (p -> p)}
+        (¬a ∨ b -> ¬a ∨ b) ^
+        (a ∨ ¬b -> a ∨ ¬b)
+    ={Logica}
+        True ^ True
+    ={Logica}
+        True
+
+    Entonces:
+
+        wp.s.q
+    ={Definicion de wp por asignacion}
+        wp.(if..fi).(a ∨ b)
+    ={If calculado anteriormente}
+        wp.(true).(a v b)
+    ={Neutro de ^}
+        a v b
+
+    Por lo cual, la terna es correcta.
+
+    Finalmente:
+
+        P -> wp.s.q
+    ={Reemplazamos P y wp}
+        True -> a v b
+    ={Logica}
+        True
+
+    e)
+
+    {N ≥0}
+    x := 0;
+    do x ̸= N →x := x + 1
+    od
+    {x = N}
+
+    Por digesto, el condicional:
+
+        Existe Inv (invariante) tal que. B es el resultado del calculo de cada seucnecia (o cada instancia de ^)
+        P ⇒Inv
+        ∧ Inv ∧ ¬B ⇒ Q
+        ∧ {Inv ∧ B} S {I}
+        ∧
+            Existe funci ́on de cota t : Estados →Int      <- 
+            (i) Inv ∧ B ⇒ t ≥0                           <-   (terminación)
+            (ii) {Inv ∧ B ∧ t = T } S {t < T }            <-
+
+    Intuición del invariante: El invariante expresa el “resultado intermedio” o “resultado parcial” que se está calculando en el ciclo, es decir, 
+    la parte del problema que llevamos resuelta hasta ahora. Al terminar el ciclo, el “resultado intermedio” se convierte en el “resultado final” 
+    (gracias al requisito iii).
+
+    Una vez que tengo el invariante y la guarda, tengo que proponer cómo va a quedar mi programa S.
+    Siempre lo vamos a proponer de la siguiente manera:
+    S va a ser una secuenciación:
+    una inicialización S1
+    ciclo de la forma: do B → S2 od.
+
+    O sea, S sería   S1 ; do B → S2 od .
+
+    O sea tendremos el siguiente programa anotado:
+    { P }  
+        S1    ;    // inicialización
+    { INV }
+        do B →
+                { INV ∧ B } 
+                S2                      // cuerpo del ciclo
+                { INV }
+        od
+    { Q }
+
+            
+    Primero, calculo el valor de la asignacion:
+
+            p -> wp.s.q                     (ya que hay un secuenciacion y necesito cota)
+        ={Asignaciones}
+            N >= 0 -> wp.(x := 0).(x >= N)
+        ={Asignacion}
+            N >= 0 -> 0 >= N
+        ={Logica}
+            True
+
+    El invariante se está cumpliendo al inicio del bucle, ya que el valor de x es igual a N.
+    Demostremos que el invariante se cumple al finalizar el bucle.
+
+        x <= N ^ -(x /= N) -> x = N
+    ={Logica}
+        x <= N ^ x = N -> x = N
+    ={Logica}
+        True
+
+    Ahora procedemeos a verficiar la terna de Hoare. {x ≤ N ∧ (x /= N )}x := x + 1{x ≤ N } <- Calculado en invariantes
+     supongamos x ≤N ∧(x != N ) y demostremos la wp
+
+        wp.S.Q
+    ={Definicion de wp por asignacion}
+        wp.(x := x + 1).(x <= N)
+    ={Logica}
+        x + 1 <= N
+    ={Logica}
+        x + 1 < N ^ x + 1 = N
+    ={Por suposicione x<= N = True}
+        True v (x + 1 = N)
+    ={Elemento absovernte disyuncion}   
+        True
+
+    d) dios te ayude
 --16)
 
 a)
@@ -897,193 +1048,6 @@ Si existe un elemento (Ak) del arreglo que sea igual a E entonces el elemento (A
 Ej extra
 
 --17) 
-a) {P} x := 8 {x = 8}
-
-    wp.S.Q
-={Definicion de WP por asignacion}
-    wp.(x := 8).(x = 8)
-={Asignacion}
-    8 = 8
-={Logica}
-    True 
-
-b)
-{P} x := 8 {x ̸= 8}
-
-    wp.S.Q
-={Definicion de WP por asignacion}
-    wp.(x := 8).(x ̸= 8)
-={Asginacion}
-    8 ̸= 8
-={Logica}
-    False
-
-c)
-
-{P} x := 9 {x = 7}
-
-    wp.S.Q
-={Definicion de WP por asignacion}
-    wp.(x := 9).(x = 7)
-={Asignacion}
-    9 = 7
-={Logiac}
-    False +
-
-d)
-{P} x := x + 1; y := y −2 {x + y = 0} => Queda:
-
-{P} x := x + 1 {x + y = 0} ^
-{P} y := y −2 {x + y = 0} 
-
-entonces
-{P} x := x + 1 {x + y = 0} ≡ {P} y := y −2 {x + y = 0} 
-
-    wp.S.Q
-={Definicion por asignacion}
-   wp.S.(wp.T.Q)
-={Secuenciacion}
-    wp.(x := x + 1).(wp.(y := y −2).(x + y = 0))
-={Asignacion}
-    wp.(x := x + 1).(y − 2 + x = 0)
-={Asignacion}
-    (x + 1) + y − 2 = 0
-
-e)
-{P} x := x + 1; y := y −1 {x ∗y = 0} => Queda:
-
-wp.(S ; T).Q ≡ wp.S.(wp.T.Q)
-
-{P} x := x + 1 {x ∗ y = 0} ^
-{P} y := y −1 {x ∗ y = 0}
-
-    wp.S.Q
-={definicion por asignacion}
-    wp.S.(wp.T.Q)
-={secuenciacion}
-    wp.(x := x + 1).(wp.(y := y −1).(x ∗ y = 0))
-={Asignacion}
-    wp.(x := x + 1).(y − 1 = 0)
-={Asignacion}
-    (x + 1) ∗ (y − 1) = 0 ?????
-
-
-f)
-{P} x := x + 1; y := y −1 {x + y + 10 = 0} => Queda
-
-wp.(S ; T).Q ≡ wp.S.(wp.T.Q)
-
-{P} x := x + 1 {x + y + 10 = 0} ^
-{P} y := y −1 {x + y + 10 = 0}
-
-    wp.S.Q
-={definicion por asignacion}
-    wp.S.(wp.T.Q)
-={secuenciacion}
-    wp.(x := x + 1).(wp.(y := y −1).(x + y + 10 = 0))
-={Asignacion}
-    wp.(x := x + 1).(y − 1 + x + 10 = 0)
-={Asignacion}
-    (x + 1) + y − 1 + x + 10 = 0
-={Aritmetica}
-    2x + y + 10 = 0
-
-
-g)
-
-{P} z := z ∗y; x := x −1 {z ∗y^x = C} => Queda
-
-wp.(S ; T).Q ≡ wp.S.(wp.T.Q)
-
-{P} z := z ∗y {z ∗y^x = C}  ^
-{P} x := x −1 {z ∗yx = C}
-
-    wp.S.Q
-={Secuenciacion}
-    wp.S.(wp.T.Q)
-={definicion por asignacion}
-    wp.(z := z ∗y).(wp.(x := x −1).(z ∗y^x = C))
-={Asignacion}
-    wp.(z := z ∗y).(z * y^(x − 1) = C)
-={Asignacion}
-    z * y^(x − 1) = C   
-
-h)
-{P} x,y,z := 1,d,c {x ∗x^y = c^d} 
-
-    wp.S.Q
-={definicion por asignacion }
-    wp.(x,y,z := 1,d,c).(x ∗x^y = c^d)
-={Asignacion}
-    (x,y,z := 1,d,c).(x ∗x^y = c^d)
-={Asignacion}
-    (x,y,z := 1,d,c).(1 ∗1^d = c^d)
-={Aritmetica}
-    (1^(d+1) = c^d)
-
-Bool, depende de q valor tenga c y d 
-
-i)
-
-{P} i,j := i + i,j; j := j + i {i = j} => Queda
-
-{P} i,j := i + i,j {i = j} ^
-{P} j := j + i {i = j} 
-
-wp.(S ; T).Q ≡ wp.S.(wp.T.Q)
-
-    wp.S.Q
-={definicion por asignacion}
-    wp.S.(wp.T.Q)
-={secuenciacion}
-    wp.(i,j := i + i,j).(wp.(j := j + i).(i = j))
-={Asignacion}    
-    wp.(i,j := i + i,j).(i = j + i)
-={Asignacion}
-    (i + i = j + i)
-
-
-j)
-
-{P} x := (x −y) ∗(x + y) {x + y^2 = 0} 
-        
-    wp.S.Q
-={ASignacion}
-    wp.(x := (x − y) ∗(x + y)).(x + y^2 = 0)
-={Asignacion}
-    ((x - y) * (x + y)) + y^2 = 0
-
-
-k)
-{P} q,r := q + 1,r −y {q ∗y + r = x}
-
-    wp.S.Q
-={Asignacion}
-    wp.(q,r := q + 1,r −y).(q ∗y + r = x)
-={Asignacion}
-    (q + 1) * y + (r - y) = x
-
-l)
-
-{P} a := a ≡b; b := a ≡b; a := a ≡b {(a ≡ B) ∧ (b ≡ A)} => Queda
-
-{P} a := a ≡ b {a ≡ B) ∧ (b ≡ A)} ^
-{P} b := a ≡ b {a ≡ B) ∧ (b ≡ A)} ^
-{P} a := a ≡ b {a ≡ B) ∧ (b ≡ A)}
-
-wp.(S ; T ; R).Q ≡ wp.S.(wp.T.(wp.R.Q))
-
-    wp.S.Q
-={Secuenciacion}
-    wp.S.(wp.R.(wp.T.Q))
-={Asignacion}
-    wp.(a := a ≡ b).(wp.(b := a ≡ b).(wp.(a := a ≡ b).((a ≡ B) ∧ (b ≡ A)))
-={Asignacion}
-    wp.(a := a ≡ b).(wp.(b := a ≡ b).((a ≡ b) ≡ B) ∧ (b ≡ A))
-={Asignacion}
-    wp.((a := a ≡ b).(a ≡ b) ≡ B)^  ((a ≡ b) ≡ A))
-={asignacion}
-    ((a ≡ b) ≡ b) ≡ B) ∧ (((a ≡ b) ≡ b) ≡ A))
 
 (Dudo que este bien)
 
