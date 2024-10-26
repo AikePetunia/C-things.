@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include <stdbool.h>
-
-bool todos_pares(int tam, int a[]) {
+#include <assert.h>
+bool todos_pares(int tam, int a[]) { 
     for (int i = 0; i < tam; i++) {
         if (a[i] % 2 != 0) {
             printf("No todos los elementos del arreglo son pares\n");
@@ -9,7 +9,7 @@ bool todos_pares(int tam, int a[]) {
         }
     }
     printf("Todos los elementos del arreglo son pares\n");
-    return true;
+    return true; 
 }
 
 bool existe_multiplo(int m, int tam, int a[]) {
@@ -31,13 +31,10 @@ int main(void) {
     int m;
     printf("ingrese la cantidad de elementos del arreglo:\n ");
     scanf("%d", &tam);
-    if (tam > 10) {
-        printf("el tamaño debe ser menor o igual a 10\n");
-        return 1;
-    }  
+    assert(tam > 0 || tam > 10 && "Error: El tamaño debe ser entre 1 y 10.\n");
     printf("Ingrese un elemento por cada linea\n");
     for(int k = 0; k < tam; k++) {
-        printf("elemento %d: ", k);
+        printf("elemento %d: ", k); //bueno, misma. no puedo con el assert checkear que son numeros los ingresados?
         scanf("%d", &a[k]);
     }
 

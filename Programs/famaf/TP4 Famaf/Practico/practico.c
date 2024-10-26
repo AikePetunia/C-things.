@@ -185,6 +185,8 @@
 
     Dado N >= 0
 
+    Programa:
+
     Var n, sum : Int;
     { P: N > 0 }
         sum := 0;
@@ -193,5 +195,100 @@
         od 
     { Q <Sum i : 0 <= i < n: n>}
 
+    Con las invariantes:
+
+    Con estructura de ciclo:
+
+    Var n, sum : Int;
+    { P }
+        S1 ; // Inicializacion
+        do
+            {INV ^ B} 
+            S2              // Cuerpo del ciclo
+            {INV}
+        od 
+    { Q }
+
+    Var n, sum : Int;
+    { P: N > 0 }
+        sum := 0;
+        {INV ^ B}
+        do 
+            sum = sum + n;
+            {INV}
+        od 
+        {Inv ^ -b}
+    { Q <Sum i : 0 <= i < n: n>}
+
+    Primero calculo la wp de la asignacion:
+
+        p -> I
+    ={Definicion de wp por asignacion}
+        N > 0 -> wp.(sum := 0).(I)
+
+    { P } -> { Inv } //Alternativamente, el es { P } skip { Inv } no se pone skip opr cuestiones de logica 
+    {Inv ^ B } S { Inv }        
+    { Inv ^ -B } skip { Q } //Termina el bucle ya que no cumple b
+ 
     
+    4)
+    Ejemplo: Suma de los elementos de un arreglo. 
+
+    Const N : Int, A : Array[0, N) of Int;
+    Var pos, res : Int;
+    { P: N ≥ 0 }
+    res, pos := 0, 0 ;
+    { R: res = 0 ∧ pos = 0 }
+    do pos < N → 
+        { hasta acá ya sumé todas las posiciones desde 0 hasta pos no inclusive }
+        res, pos := res + A.pos, pos + 1
+    od
+    { Q: res = 〈∑ i : 0 ≤ i < N : A.i 〉}
+
+    Invariante:  Recordemos que expresa el “resultado intermedio”:
+
+    INV ≡     res = 〈 ∑ i : 0 ≤ i < pos : A.i 〉  ∧   0 ≤ pos ≤ N
+
+    Lo sacamos “de la galera”. Ahora vamos a demostrar que es correcto:
+
+    i) R ⇒ INV
+
+    Suponemos R como hip: res = 0 ∧ pos = 0.
+    Vemos INV:
+    INV
+    ≡ {  ?????  (ejercicio) }
+    True
+
+    ii) El invariante se preserva en el cuerpo del ciclo:
+    { INV ∧ B } S { INV }
+    donde S es el cuerpo del ciclo: res, pos := res + A.pos, pos + 1
+
+    Demostración: Usamos wp: Probamos que INV ∧ B ⇒ wp.S.INV.
+
+    Suponemos INV ∧ B como hipótesis:
+    INV ≡         res = 〈 ∑ i : 0 ≤ i < pos : A.i 〉     
+                        ∧ 0 ≤ pos ≤ N 
+                res = A.0 + …. + A.(pos-1)
+    B    ≡      pos < N
+
+    Veamos la wp:
+    wp.(res, pos := res + A.pos, pos + 1).INV
+    ≡ { def. wp para := }
+    res + A.pos  = 〈 ∑ i : 0 ≤ i < pos + 1 : A.i 〉  ∧   0 ≤ pos + 1 ≤ N
+            ///               A.0 + …. + A.(pos-1) + A.pos
+    ≡ { lógica y partición de rango }
+    res + A.pos  = 〈 ∑ i : 0 ≤ i < pos : A.i 〉   + 〈 ∑ i : i = pos : A.i 〉      ∧   0 ≤ pos + 1 ≤ N
+    ≡ { rango unitario }
+    res + A.pos  = 〈 ∑ i : 0 ≤ i < pos : A.i 〉 +   A.pos                               ∧   0 ≤ pos + 1 ≤ N
+    ≡ {  hip. me dice que esa sumatoria es res }
+    res + A.pos  = res +   A.pos                                                                 ∧      0 ≤ pos + 1 ≤ N
+    ≡ { reflexividad }
+    True ∧       0 ≤ pos + 1 ≤ N
+    ≡ {  neutro, y lógica  }
+    0 ≤ pos + 1   ∧   pos + 1 ≤ N
+    ≡ { 0 ≤ pos + 1 vale por hip pos ≥ 0. }
+    pos + 1 ≤ N
+    ≡ { pos + 1 ≤ N vale por hip B: pos < N }
+    True
+
 */

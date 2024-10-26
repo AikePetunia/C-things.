@@ -28,10 +28,7 @@ int main(void) {
     
     printf("Ingrese la cantidad de elementos que tendrá el arreglo: \n");
     scanf("%d", &tam);
-    if (tam > 10 ) {
-        printf("el tamaño debe ser menor o igual a 10\n");
-        return 1;
-    }
+    assert(tam > 0 || tam > 10 && "Error: El tamaño debe ser entre 1 y 10.");
 
     printf("Ingrese un elemento por cada linea\n");
     for(int k = 0; k < tam; k++) {

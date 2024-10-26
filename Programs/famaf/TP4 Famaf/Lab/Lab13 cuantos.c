@@ -31,14 +31,7 @@ int main(void) {
     int elem; 
 
     printf("Ingrese el tamaño del arreglo: ");
-    if (scanf("%d", &tam) != 1) {
-        printf("Error: el tamaño debe ser un número entero\n");
-        return 1;
-    }
-    if (tam > 10 || tam < 1) {
-        printf("El tamaño debe ser un número entre 1 y 10\n");
-        return 1;
-    }
+    assert(tam > 0 && tam < 10 && "El tamaño debe ser un número entre 1 y 10");
 
     printf("ingrese los elementos del arreglo");
     for (int k; k < tam; k++) {
@@ -53,7 +46,6 @@ int main(void) {
         printf("Error: el elemento debe ser un número entero\n");
         return 1;
     }
-
 
     struct comp_t resultado = cuantos(tam, a, elem);
 

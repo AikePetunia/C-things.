@@ -1,26 +1,27 @@
 #include <stdio.h>
 
 int main () {
-
+    //Asignaciones múltiples
     int x, y, z, xaux;
     x = 5;
     y = 8;
     z = 3;
     
-    /*
+    
     int xaux = x;
     int yaux = y;
-    int zaux = z;*/
+    int zaux = z;
+    
 
     x = x + 1;
     y = x + y;
 
-    /*
-    Asignaciones simples
+    
+    //Asignaciones simples
     x = y;
     y = yaux + xaux + zaux;
     z = yaux + xaux;
-    */
+    
     printf("los valores son de x %d de y %d  de z %d \n", x, y, z);
 
     return 0;
