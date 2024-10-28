@@ -1,12 +1,16 @@
 #include <stdio.h>
 #include <stdbool.h>
 #include <assert.h>
+#define N 5
+
 bool todos_pares(int tam, int a[]) { 
-    for (int i = 0; i < tam; i++) {
+    int i = 0;
+    while (i < N) {
         if (a[i] % 2 != 0) {
             printf("No todos los elementos del arreglo son pares\n");
             return false;
         }
+        i = i + 1;
     }
     printf("Todos los elementos del arreglo son pares\n");
     return true; 
@@ -15,30 +19,29 @@ bool todos_pares(int tam, int a[]) {
 bool existe_multiplo(int m, int tam, int a[]) {
     printf("Ingrese el multiplo que desea buscar: ");
     scanf("%d", &m);
-    for (int i = 0; i < tam; i++) {
+    int i = 0;
+    while (i < N) {
         if (a[i] % m == 0) {
             printf("El multiplo %d existe en el arreglo\n", m);
             return true;
         }
+        i = i + 1;
     }
-    printf("El multiplo %d no existe en el arreglo\n", m);
+    printf("Hay multiplos %d no existe en el arreglo\n", m);
     return false;
 }
 
 int main(void) {
-    int tam;
     int a[10];
     int m;
-    printf("ingrese la cantidad de elementos del arreglo:\n ");
-    scanf("%d", &tam);
-    assert(tam > 0 || tam > 10 && "Error: El tamaño debe ser entre 1 y 10.\n");
+    int i = 0;
     printf("Ingrese un elemento por cada linea\n");
-    for(int k = 0; k < tam; k++) {
-        printf("elemento %d: ", k); //bueno, misma. no puedo con el assert checkear que son numeros los ingresados?
-        scanf("%d", &a[k]);
+    while(i < N) {
+        printf("elemento %d: ", i);
+        scanf("%d", &a[i]);
+        i = i + 1 ;
     }
-
-    existe_multiplo(m, tam, a);
-    todos_pares(tam, a);
+    existe_multiplo(m, N, a);
+    todos_pares(N, a);
 
 }

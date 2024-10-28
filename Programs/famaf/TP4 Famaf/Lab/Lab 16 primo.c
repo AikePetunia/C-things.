@@ -30,7 +30,6 @@ int main(void) {
     
     do {
         printf("Ingrese un numero entero positivo: ");
-        
         if (scanf("%d", &N) != 1) {  
             printf("Debe ingresar un numero entero.\n");
             control = 0;

@@ -1,29 +1,28 @@
 #include <stdio.h>
 #include <assert.h>
+#define N 5
 
 int sumatoria (int tam, int a[]) {
     int suma = 0;
-    for (int i = 0; i < tam; i++) {
+    int i = 0;
+    while (i < N) {
         suma += a[i]; //esta expresion es legal bajo lo que nos enseñaron en la clase?
+        i = i + 1;
     }
     printf("la sumatoria de los elementos del arreglo es: %d\n", suma);
 }
 
 int main() {
-    int tam;
     int a[10];
-
-    printf("Ingrese la cantidad de elementos que tendrá el arreglo: \n");
-    scanf("%d", &tam);
-    assert(tam <= 0 && tam > 10 && "\n Error: El tamaño debe ser entre 1 y 10.\n");
-
+    int i = 0;
     printf("Introduzca los valores de los elementos \n");
-    for (int k = 0; k < tam; k++) {
-        printf("elemento %d: ", k); //bueno, misma. no puedo con el assert checkear que son numeros los ingresados?
-        scanf("%d", &a[k]);
+    while (i < N) {
+        printf("elemento %d: ", i); //bueno, misma. no puedo con el assert checkear que son numeros los ingresados?
+        scanf("%d", &a[i]);
+        i = i + 1;
     }
 
-    sumatoria(tam, a);
+    sumatoria(N, a);
     
     return 0;
 }

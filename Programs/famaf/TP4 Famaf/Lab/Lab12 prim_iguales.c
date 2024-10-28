@@ -1,6 +1,8 @@
 #include <stdio.h>
 #include <stdbool.h>
 #include <assert.h>
+#define N 5
+
 bool es_primo(int n) {
     if (n <= 1) return false;
     if (n == 2) return true; 
@@ -12,13 +14,16 @@ bool es_primo(int n) {
 }
 
 int prim_iguales(int tam, int a[]) {
-    int i, j;
-    for (int i = 0; i < tam ; i++) {
-        for (int j = i + 1; j < tam; j++) {
+    int i = 0;
+    int j = 0;
+    while (i < N) {
+        while (j < N) {
             if (es_primo(a[i]) && es_primo(a[j]) && a[i] == a[j]) {
                 return true; 
-            } 
+            }
+            j = j + 1; 
         }
+        i = i + 1;
     }
     return false;
 }
@@ -53,34 +58,23 @@ void mayor_tramo(int tam, int a[]) {
     del arreglo y no se haya actualizado porque el else solo se ejecuta cuando el tramo termina, es decir, 
     cuando los elementos dejan de ser iguales. Por eso, es necesario hacer una última verificación fuera del bucle:
     */
-
     printf("El mayor tramo de elementos iguales tiene longitud %d y el valor numerico es %d\n", tramo_max, valor_tramo);
 }
 
 int main(void) {
-    int tam;
-    int a[10];
-
-    printf("ingrese la cantidad de elementos que tendrá el arreglo (Ingrese numeros): ");
-    if (scanf("%d", &tam) == 0) {
-        printf("Debe ingresar un número\n");
-        return 1; //bue, esto es lo de 12312789 labs atras
-    }
-
-    assert(tam > 0 || tam <= 10 && "Error: El tamaño debe ser entre 1 y 10");
+    int a[N];
+    int i = 0;
     printf("Ingrese los elementos del arreglo: \n");
-    for (int k; k < tam; k++) {
-        printf("elemento (Ingrese numeros) %d: ", k);
-        if (scanf("%d", &a[k]) == 0) {
-            printf("Debe ingresar un número en el arreglo\n"); //t lo juro q es la unica manera.
-        return 1;
+    while (i < N) {
+        printf("elemento (Ingrese numeros) %d: ", i);
+        scanf("%d", &a[i]);
+        i = i + 1;
     }
-    }
-
-    if (prim_iguales(tam, a)) {
+    
+    if (prim_iguales(N, a)) {
         printf("Hay dos elementos en el arreglo que son primos iguales\n");
     } else{
         printf("No hay dos elementos en el arreglo que sean primos iguales\n");
     }
-    mayor_tramo(tam, a);
+    mayor_tramo(N, a);
 }

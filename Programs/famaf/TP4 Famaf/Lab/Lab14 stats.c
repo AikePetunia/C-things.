@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <float.h>
+#define N 5
 
 struct datos_t {
     float min;
@@ -12,8 +13,8 @@ struct datos_t stats(int tam, float a[]) {
     resultado.min = FLT_MAX;
     resultado.max = FLT_MIN;
     float sum = 0.0;
-    
-    for (int i = 0; i < tam; ++i) {
+    int i = 0;
+    while (i < N) {
        if (a[i] < resultado.min) {
            resultado.min = a[i];
        }
@@ -23,37 +24,23 @@ struct datos_t stats(int tam, float a[]) {
        sum += a[i];
     }
 
-    resultado.promedio = sum / tam;
+    resultado.promedio = sum / N;
     return resultado;
 
 }
 
 int main (void) {
-    int tam;
     float a[10];
-    
-    printf("Ingrese el tamaño del arreglo: \n");
-    
-    if(scanf("%d", &tam) != 1) {
-        printf("Debe ingresarse un numero");
-        return 1;
-    }
-
-    if (tam > 10 || tam < 1) {
-        printf("Debe ingresar un tamaño no mayor a 10 y mayor a 1");
-        return 1;
-    }
+    int i = 0;
 
     printf("Ingrese los numeros del arreglo: \n");
-    for (int k = 0; k < tam ; k++) {
-        printf("Elemento %d: ", k);
-        if(scanf("%f", &a[k])!= 1) {
-            printf("Debe ingresar un numero");
-            return 1;
-        }
+    while (i < N) {
+        printf("Elemento %d: ", i);
+        scanf("%f", &a[i]);
+        i = i + 1;
     }
 
-    struct datos_t resultado = stats(tam, a);
+    struct datos_t resultado = stats(N, a);
     printf("El valor minimo es: %f\n", resultado.min);
     printf("El valor maximo es: %f\n", resultado.max);
     printf("El promedio es: %f\n", resultado.promedio);

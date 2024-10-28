@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdbool.h>
-
+#include <assert.h>
+#define N 5
 typedef char clave_t;
 typedef int valor_t;
 
@@ -23,23 +24,11 @@ bool asoc_existe (int tam, struct asoc a[], clave_t c) {
 }
 
 int main (void) {
-    int tam;
-    struct asoc a[10];
+    struct asoc a[N];
     char clave;
 
-    printf("Ingrese el tamaño del arreglo: \n");
-    if (scanf("%d", &tam) != 1) {
-        printf("Debe ingresarse un numero");
-        return 1;
-    }
-
-    if (tam > 10 || tam < 1) {
-        printf("Debe ingresar un tamaño no mayor a 10 y mayor a 1");
-        return 1;
-    }
-
     printf("Ingrese las claves y valores del arreglo: \n");
-    for (int k = 0; k < tam ; k++) {
+    for (int k = 0; k < N ; k++) {
         printf("Elemento %d - Clave caracter: ", k);
         if(scanf(" %c", &a[k].clave) != 1) {
             printf("Debe ingresar un caracter\n");
@@ -53,7 +42,7 @@ int main (void) {
         return 1;
     }
 
-    asoc_existe(tam, a, clave);
+    asoc_existe(N, a, clave);
 
 }
 //La clave es un char. Un numero puedoe ser un char
