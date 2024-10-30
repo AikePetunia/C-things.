@@ -1,4 +1,6 @@
 /*
+Ayuda:
+https://apuntes-famaf-lcc.vercel.app/algoritmos1/programas_imperativos
 1)
  { P } S { Q }
 
@@ -84,7 +86,7 @@
         
 2)
 
-    apunte del profe luque:
+    Sol apunte del profe luque:
 
     Ejemplo: Factorial de un número N: Dado N ≥ 0 quiero calcular el factorial de N.
 
@@ -145,6 +147,27 @@
     ( F no puede ser 1 porque no puedo saber 1 ≤ N )
     Elijo F = 0, E = 1 y sale todo bien (ejercicio: verificarlo con la wp)
 
+    verifico:
+    De ante mano ya se que debería quedar de la manera:
+        res, n := 1, 0 ;
+
+        wp.S1.I
+    ={Asignacion de wp.}
+        (res, n := E, F).(res = n ! ^ 0 <= res <= n )
+    ={Asigno e, f}
+        (E = F! ^ 0 <= E <= F )
+    ={Supongo F = 0}
+        (E = 0! ^ 0 <= E <= 0 )
+    ={Por Aritmetica}
+        E = 1 ^ 0 <= E <= 0
+    ={Logica}
+        E = 1 )?)
+    ={Elijo E = 1}
+        True
+    
+    Entonces, concluyo:
+    res, n := 1, 0;
+
     Cuerpo del ciclo:
             { INV ∧ B:  res = n !  ∧  0 ≤ n ≤ N  ∧  n ≠ N }
             S2
@@ -154,19 +177,19 @@
 
     Derivemos: Supongamos como hipótesis INV ∧ B, y veamos la wp:
 
-    wp.(res, n := E , n + 1).INV
+        wp.(res, n := E , n + 1).INV
     ≡ { def. wp para :=  }
-    E = (n+1) !  ∧  0 ≤ n+1 ≤ N
+        E = (n+1) !  ∧  0 ≤ n+1 ≤ N
     ≡ { algebra (prop !) }
-    E = n! * (n + 1)     ∧      0 ≤ n+1 ≤ N
+        E = n! * (n + 1)     ∧      0 ≤ n+1 ≤ N
     ≡ { hip. INV }   ← FUNDAMENTAL A LA HORA DE DERIVAR UN CUERPO DE CICLO
-    E = res * (n + 1)     ∧      0 ≤ n+1 ≤ N
+        E = res * (n + 1)     ∧      0 ≤ n+1 ≤ N
     ≡ { elijo E = res * (n+1) }
-    res * (n+1) = res * (n + 1)     ∧     0 ≤ n+1 ≤ N
-    ≡ { lógica }
-    0 ≤ n+1 ≤ N
+        res * (n + 1) = res * (n + 1)     ∧     0 ≤ n+1 ≤ N
+    ≡ { lógica, elim de ambos lados.}
+        0 ≤ n+1 ≤ N
     ≡ { 0 ≤ n+1 vale por hip. 0 ≤ n,    n+1 ≤ N vale por hip   n ≤ N  ∧ n ≠ N  } 
-    True
+        True
 
     Listo! Resultado final:
     Const N : Int;
@@ -185,110 +208,429 @@
 
     Dado N >= 0
 
-    Programa:
+    Existe I (inv) tq:
+
+    1) p -> I ^                     (Esto implicará en futuro p => wp.s1.q)
+    2) {I ^ B} S { I } ^            (Esto implicará en futuro I ^ B = > wp.s2.q)
+    3) I ^ -b => Q
+    4) El ciclo termina
+
+    (dsp funciones de cota )
+
+     Var n, sum : Int;
+    { P: N >= 0 }
+    S
+    { Q } 
+
+    Derivacion: Neceisot un ciclo. APlico la tecnica de reemplazo de consante por variable.
+    Pienso en un Q que cumpla:
+
+    { P: N >= 0 }
+    S
+    { Q : res = <Sum i : 0 <= i < pos: i> ^ 0 <= pos <= N} 
+    
+    A ojo, veo que el programa tiene la forma de:
+
+    En el ciclo, se cumple que:
+    B = pos != N 
+
+    Programa (a ojo):
 
     Var n, sum : Int;
-    { P: N > 0 }
-        sum := 0;
-        do 
-            sum = sum + n;
+    { P: N >= 0 }
+        res, pos := 0, 0;       //s1 Inicializacion
+        do (pos != N)
+            pos := pos + res;   //s2 Cuerpo
         od 
-    { Q <Sum i : 0 <= i < n: n>}
+    { Q: res = <Sum i : 0 <= i < N: i> }
+    
+    //Quiza sea de esta manera, lo hice a ojo.
 
-    Con las invariantes:
-
-    Con estructura de ciclo:
+    Tendrá la forma de:
 
     Var n, sum : Int;
     { P }
         S1 ; // Inicializacion
-        do
+        do (B)
             {INV ^ B} 
             S2              // Cuerpo del ciclo
             {INV}
         od 
     { Q }
 
-    Var n, sum : Int;
-    { P: N > 0 }
-        sum := 0;
-        {INV ^ B}
-        do 
-            sum = sum + n;
+    El invariante tendria la forma de:
+    res = <Sum i : 0 <= i < pos: i> ^ 0 <= pos <= N
+
+    Hago la inicializacion:             // -> p => wp.S1.I
+
+    Propongo que habrá s1 tq:
+
+    res, pos := E, F;
+
+    Supongo p y veo su wp.
+
+        wp.s1.q
+    ={Asignacion de wp}
+        (res, pos := E, F;).(res = <Sum i : 0 <= i < pos: i> ^ 0 <= pos <= N)
+    ={Asignacion}
+        (E = <Sum i : 0 <= i < F: i> ^ 0 <= F <= N)
+    ={Supongo F = 0}
+        (E = <Sum i : 0 <= i < 0: i> ^ 0 <= 0 <= N)
+    ={Rango vacio}
+        (E = 0 ^ 0 <= 0 <= N)
+    ={Hipotesis de P ( En la terna propuesta, N >= 0)}
+        E = 0
+    ={Elijo E = 0}
+        True
+
+    El programa va obtentiendo la forma de:
+
+
+    { P : N >= 0 }
+    res, pos := 0, 0;    // Inicializacion
+        do (pos != N ) ???
+            {INV ^ B} 
+            S2    ???          // Cuerpo del ciclo
             {INV}
         od 
-        {Inv ^ -b}
-    { Q <Sum i : 0 <= i < n: n>}
+    { Q : res = <Sum i : 0 <= i < pos: i> ^ 0 <= pos <= N}
 
-    Primero calculo la wp de la asignacion:
 
-        p -> I
-    ={Definicion de wp por asignacion}
-        N > 0 -> wp.(sum := 0).(I)
+    Ahora con el cuerpo del ciclo:
 
-    { P } -> { Inv } //Alternativamente, el es { P } skip { Inv } no se pone skip opr cuestiones de logica 
-    {Inv ^ B } S { Inv }        
-    { Inv ^ -B } skip { Q } //Termina el bucle ya que no cumple b
- 
+    {I ^ B} s2 {I} == I ^ b => wp.s2.I
     
+    Supongo que s2 tiene la forma de:
+    
+    res, pos := E, pos + 1;
+
+    Entonces:
+
+        wp.s2.q
+    ={Asignacion de wp}
+        (res, pos := E, pos + 1;).(res = <Sum i : 0 <= i < pos: i> ^ 0 <= pos <= N)
+    ={Asignaciones}
+        (E = <Sum i : 0 <= i < pos + 1: i> ^ 0 <= pos + 1 <= N)
+    ={Por logica}
+        (E = <Sum i : i = 0 v 0 <= i < pos + 1: i> ^ 0 <= pos + 1 <= N)
+    ={Part de rango}
+        (E = <Sum i : 1 <= i < pos + 1: i> + <Sum i : i = 0 : i> ^ 0 <= pos + 1 <= N)
+    ={elim de var}
+        (E = <Sum i : 1 <= i < pos + 1: i> + 0 ^ 0 <= pos + 1 <= N)
+    ={Neutro de sum y Cambio de var, i = i + 1 }
+        (E = <Sum i : 1 <= i + 1 < pos + 1: i + 1> ^ 0 <= pos + 1 <= N)
+    ={Aritmetica}
+        (E = <Sum i : 0 <= i < pos : i + 1> ^ 0 <= pos + 1 <= N)
+    ={Escape de constante (+1) ?}
+        (E = <Sum i : 0 <= i < pos : i> + 1 ^ 0 <= pos + 1 <= N)
+    ={Por P, N >= 0 y aritmetica}
+        (E = <Sum i : 0 <= i < pos : i> + 1 ^ N >= pos + 1)
+    ={Por hipotesis P, y Q}
+        (E = res + 1 ^ pos + 1)
+
+    Finalmente:
+
+    { P : N >= 0 }
+    res, pos := 0, 0;    // Inicializacion
+        do (pos != N ) 
+            res, pos := res + 1, pos + 1;          // Cuerpo del ciclo
+        od 
+    { Q : res = <Sum i : 0 <= i < pos: i> ^ 0 <= pos <= N}
+
+    Luego, { I ^ -b} S { Q } Trivialmente
+
+            
     4)
-    Ejemplo: Suma de los elementos de un arreglo. 
+
+    Dado N >= 0
+
+    Existe I (inv) tq:
+
+    1) p -> I ^                     (Esto implicará en futuro p => wp.s1.q)
+    2) {I ^ B} S { I } ^            (Esto implicará en futuro I ^ B = > wp.s2.q)
+    3) I ^ -b => Q                  (Suele ser trivial)
+    4) El ciclo termina
+
+    (dsp funciones de cota )
+
+     Var n, sum : Int;
+    { P: N >= 0 }
+    S
+    { Q } 
+
+    Derivacion: 
+        Necesito un ciclo. 
+        Aplico la tecnica de reemplazo de consante por variable.
+    
+    Pienso en un Q que cumpla:
+
+    { P: N >= 0 }
+    S
+    { Q : res = <sum i : 0 ≤ i < N : A.i >} 
+
+    En el ciclo, se cumple que:
+    B = pos != N  (Alternativamente, pos < N)
+
+    Luego, I ^ -b -> Q es trivial. 
+
+    A ojo, veo que el programa tiene la forma de:
 
     Const N : Int, A : Array[0, N) of Int;
     Var pos, res : Int;
-    { P: N ≥ 0 }
+    { P: N >= 0 }
     res, pos := 0, 0 ;
     { R: res = 0 ∧ pos = 0 }
-    do pos < N → 
+    do pos != N → 
         { hasta acá ya sumé todas las posiciones desde 0 hasta pos no inclusive }
         res, pos := res + A.pos, pos + 1
     od
-    { Q: res = 〈∑ i : 0 ≤ i < N : A.i 〉}
+    { Q: res = <sum i : 0 ≤ i < N : A.i >}
+
+    Pero tendrá la forma tal que:
+
+    { P : N >= 0}
+    s1;                         //Inicializacion
+    {Inv}
+        do (pos != N)
+        {Inv ^ b}       
+            s2;                 //Cuerpo
+        {Inv}
+        od
+    {Q : <sum i : 0 ≤ i < N : A.i >}
 
     Invariante:  Recordemos que expresa el “resultado intermedio”:
 
-    INV ≡     res = 〈 ∑ i : 0 ≤ i < pos : A.i 〉  ∧   0 ≤ pos ≤ N
+    INV ≡    { res = <sum i : 0 ≤ i < pos : A.i >  ∧   0 ≤ pos ≤ N }
 
-    Lo sacamos “de la galera”. Ahora vamos a demostrar que es correcto:
+    //inicializacion
 
-    i) R ⇒ INV
+    Tengo que:
+    
+    p => wp.s1.I
 
-    Suponemos R como hip: res = 0 ∧ pos = 0.
-    Vemos INV:
-    INV
-    ≡ {  ?????  (ejercicio) }
-    True
+    Y:
 
-    ii) El invariante se preserva en el cuerpo del ciclo:
-    { INV ∧ B } S { INV }
-    donde S es el cuerpo del ciclo: res, pos := res + A.pos, pos + 1
+    { P : N >= 0}
+    S1;
+    {Q : <sum i : 0 ≤ i < N : A.i > }
 
-    Demostración: Usamos wp: Probamos que INV ∧ B ⇒ wp.S.INV.
+    Entonces:
+    Propongo que, res, pos := E, F; + La inv que tengo.
 
-    Suponemos INV ∧ B como hipótesis:
-    INV ≡         res = 〈 ∑ i : 0 ≤ i < pos : A.i 〉     
-                        ∧ 0 ≤ pos ≤ N 
-                res = A.0 + …. + A.(pos-1)
-    B    ≡      pos < N
+        wp.s1.I
+    ={Asignacion de wp}
+        wp.(res, pos := E, F;).(res = <sum i : 0 ≤ i < pos : A.i >  ∧   0 ≤ pos ≤ N)
+    ={Asignaciones}
+        (E = <sum i : 0 ≤ i < F : A.i >  ∧   0 ≤ F ≤ N)
+    ={Elijo F = 0}
+        (E = <sum i : 0 ≤ i < 0 : A.i >  ∧   0 ≤ 0 ≤ N)
+    ={Rango vacio}
+        E = 0 ^  0 ≤ 0 ≤ N
+    ={Hip de p. ( N >= 0)}
+        E = 0
+    ={Elijo E = 0}
+        True
 
-    Veamos la wp:
-    wp.(res, pos := res + A.pos, pos + 1).INV
-    ≡ { def. wp para := }
-    res + A.pos  = 〈 ∑ i : 0 ≤ i < pos + 1 : A.i 〉  ∧   0 ≤ pos + 1 ≤ N
-            ///               A.0 + …. + A.(pos-1) + A.pos
-    ≡ { lógica y partición de rango }
-    res + A.pos  = 〈 ∑ i : 0 ≤ i < pos : A.i 〉   + 〈 ∑ i : i = pos : A.i 〉      ∧   0 ≤ pos + 1 ≤ N
-    ≡ { rango unitario }
-    res + A.pos  = 〈 ∑ i : 0 ≤ i < pos : A.i 〉 +   A.pos                               ∧   0 ≤ pos + 1 ≤ N
-    ≡ {  hip. me dice que esa sumatoria es res }
-    res + A.pos  = res +   A.pos                                                                 ∧      0 ≤ pos + 1 ≤ N
-    ≡ { reflexividad }
-    True ∧       0 ≤ pos + 1 ≤ N
-    ≡ {  neutro, y lógica  }
-    0 ≤ pos + 1   ∧   pos + 1 ≤ N
-    ≡ { 0 ≤ pos + 1 vale por hip pos ≥ 0. }
-    pos + 1 ≤ N
-    ≡ { pos + 1 ≤ N vale por hip B: pos < N }
-    True
+    //Cuerpo
+
+    Conclui en el anterior. Por mi logica que:
+
+    res, pos := E, pos + 1;
+
+    Tengo que:
+    { I ^ B } S2 {I} == I ^ B => wp.s2.I
+
+        wp.S2.I
+    ={Asignacion de wp}
+        wp.(res, pos := E, pos + 1;).(res = <sum i : 0 ≤ i < pos : A.i >  ∧   0 ≤ pos ≤ N)
+    ={Asignacion de digesto.}
+        (E = <sum i : 0 ≤ i < pos + 1 : A.i >  ∧   0 ≤ pos + 1 ≤ N)
+    ={Logica de manera 2}
+        (E = <sum i : i = pos v 1 ≤ i < pos : A.i >  ∧   0 ≤ pos + 1 ≤ N)
+    ={Part de rango }
+        (E = <sum i : i = pos : A.i > + <sum i : 0 ≤ i < pos : A.i >  ∧   0 ≤ pos + 1 ≤ N)
+    ={Asig de var}
+        E = A.pos + <sum i : 0 ≤ i < pos : A.i >  ∧   0 ≤ pos + 1 ≤ N
+    ={Hip de Q ( lo q vale res) y P ( N >= 0)}
+        E = A.Pos + res + 1
+    ={Elijo E = A.pos + res}
+        true 
+
+    Quedando válido, la ultima parte de I ^ -b => Q  es trivial
+
+
+    El programa quedo:
+
+    { P : N >= 0}
+        res, pos := 0, 0;                                               //Inicializacion
+            do (pos != N) 
+                res, pos := A.Pos + res + 1, pos + 1;                 //Cuerpo
+            od
+    {Q : <sum i : 0 ≤ i < N : A.i >}
+
+
+5)
+
+    a)
+
+    Recorre un arreglo -> Do
+    Se fija si los elementos son mayores a 0 (naturales de cierta forma)
+    Var a: array[0,N) of Int;      
+    { P : N >= 0 }
+        S
+    { Q : res = <Ai : 0 <= i < N : A.i > 0 > }
+
+    Existe I (inv) tq:
+
+    1) p -> I ^                     (Esto implicará en futuro p => wp.s1.I)
+    2) {I ^ B} S { I } ^            (Esto implicará en futuro I ^ B = > wp.s2.I)
+    3) I ^ -b => Q                  (Suele ser trivial)
+    4) El ciclo termina
+
+    (dsp funciones de cota )
+
+    Derivacion: 
+        Necesito un ciclo. 
+        Aplico la tecnica de reemplazo de consante por variable.
+
+    En el ciclo, b debería de ser de la forma:
+
+    pos < N
+
+    Entonces, nos va quedando de la manera:
+
+    Var a: array[0,N) of Int;
+    { P : N >= 0 }
+    S1;
+        do (pos < N)
+        s2;
+        od
+    { Q : res = <Ai : 0 <= i < N : A.i >= 0 > }
+
+    con una estructura de:
+
+    Var a: array[0,N) of Int;
+    { P : N >= 0 }
+    S1;
+    {Inv}
+        do (pos < N)
+        {Inv ^ b}
+        s2;
+        {Inv}
+        od
+    { Q : res = <Ai : 0 <= i < N : A.i >= 0 > }
+
+    Var a: array[0,N) of Int;
+    { P : N >= 0}
+    s1;                         //Inicializacion
+    {Inv}
+        do (pos != N)
+        {Inv ^ b}       
+            s2;                 //Cuerpo
+        {Inv}
+        od
+    {Q : res = <A i : 0 ≤ i < N : A.i >= 0>}
+
+    Supongo que mi invariante, será de la forma
+    res = <A i : 0 ≤ i < pos : A.i >= 0 > ^ 0 <= pos <= N
+
+    Entonces, veo:
+
+    //Inicializacion:
+
+    Veo si p => wp.s1.I
+
+    {N >= 0}
+    S1;
+    { Q : res = <A i : 0 ≤ i < pos : A.i >= 0> ^ 0 <= pos <= N}
+
+    Busco algun S1 de la forma res,pos := E, F; Para ellos supongamos la hipotesis (N>= 0) y veamos la wp:
+    res,pos := E, F;
+
+        wp.s1.I
+    ={Def de wp}
+        wp.(res,pos := E, F;).(res = <A i : 0 ≤ i < pos : A.i >= 0> ^ 0 <= pos <= N)
+    ={Def wp de asignacion}
+        (E = <A i : 0 ≤ i < F : A.i >= 0> ^ 0 <= F <= N)
+    ={Supongo F = 0}
+        (E = <A i : 0 ≤ i < 0 : A.i >= 0> ^ 0 <= 0 <= N)
+    ={Rango vacio, Hipotesis de N>=0}
+        (E = true ^ True)
+    ={Logica}
+        True
+
+        Por ende, tengo que s1 es:
+        E = True, F = 0
+        Entonces:
+        s1 == res, pos := True, 0;
+
+    Finalizo, demostrando I ^ -b => Q. Ya se que B es pos != N
+
+        res = <A i : 0 ≤ i < pos : A.i >= 0> ^ 0 <= pos <= N ^ -(pos != N) => res = <A i : 0 ≤ i < N : A.i >= 0>
+    ={Logica}
+        res = <A i : 0 ≤ i < pos : A.i >= 0> ^ 0 <= pos <= N ^ pos = N => res = <A i : 0 ≤ i < N : A.i >= 0>
+    ={Supongo antecedente y demuestro consecuente (O sea, como se repite en dos lados el res, se elimina)}
+        <A i : 0 ≤ i < pos : A.i >= 0 >
+    ={Por que pos = N}
+        <A i : 0 ≤ i < N : A.i >= 0 >
+    ={Por Q}
+        True
+
+
+    Va quedando el programa:
+
+    Var a: array[0,N) of Int;
+    { P : N >= 0}
+    res, pos := True, 0;                         //Inicializacion
+    {Inv}
+    do (pos != N)
+        {Inv ^ b}       
+            s2;                 //Cuerpo
+        {Inv}
+    od
+    {Q : res = <A i : 0 ≤ i < N : A.i >= 0>}
+
+    Ahora veamos:
+
+    {I ^ B } S2 { Q } == (I ^ B = > wp.s2.I)
+
+    Busco una manera de que se siga validando las posiciones en bucle, pienso en un aumento de la mnera que:
+    res, pos := E, pos + 1;
+
+    Por s1, se que vale y supongo:
+        res = <∀i : 0 ≤i < pos : A.i ≥0 >∧ 0 ≤ pos ≤N ∧ pos != N
+
+        wp.s2.I
+    ={Def de wp}
+        wp.(res, pos := E, pos + 1;).(res = <∀i : 0 ≤i < pos : A.i ≥0 >∧ 0 ≤ pos ≤N ∧ pos != N)
+    ={Asignaciones}
+        (E = <∀i : 0 ≤ i < pos + 1 : A.i ≥ 0 >∧ 0 ≤ pos + 1 ≤ N)
+    ={Logica}
+        (E = <∀i : 0 ≤ i < pos v i = pos : A.i ≥ 0 >∧ 0 ≤ pos + 1 ≤ N)
+    ={Particion de rango y rango unitario}
+        (E = <∀i : 0 ≤ i < pos : A.i ≥ 0 > a.pos >= 0 ∧ 0 ≤ pos + 1 ≤ N)
+    ={Por hipotesis P (N >= 0)}
+        (E = <∀i : 0 ≤ i < pos : A.i ≥ 0 > ^ a.pos >= 0)
+    ={Por suposicion de Q}
+        E = res ^ a.pos >= 0
+    ={Elijo E = res ^ a.pos >= 0}
+        true
+
+
+        Quedando  finalmente el programa:
+
+    Var a: array[0,N) of Int;
+    { P : N >= 0}
+    res, pos := True, 0;                         //Inicializacion
+    {Inv}
+    do (pos != N)
+        {Inv ^ b}       
+            res, pos := res ^ a.pos >= 0, pos + 1;                //Cuerpo
+        {Inv}
+    od
+    {Q : res = <A i : 0 ≤ i < N : A.i >= 0>}
+
+
+
 
 */
