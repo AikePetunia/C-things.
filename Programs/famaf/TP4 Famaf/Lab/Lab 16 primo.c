@@ -1,6 +1,5 @@
 #include <stdio.h>
 #include <stdbool.h>
-
 bool es_primo(int n) {
     if (n <= 1) return false;
     if (n == 2) return true; 
@@ -24,17 +23,18 @@ int nesimo_primo(int N) {
     return numero;
 }
 
-int main(void) {
-    int N;
+int main (void) {
+    int primo;
     int control = 0;
-    
+    printf("Ingrese un numero primo :");
+    scanf("%d", &primo);
     do {
         printf("Ingrese un numero entero positivo: ");
-        if (scanf("%d", &N) != 1) {  
+        if (scanf("%d", &primo) != 1) {  
             printf("Debe ingresar un numero entero.\n");
             control = 0;
             while (getchar() != '\n'); // Limpiar el buffer de entrada
-        } else if (N <= 0) { 
+        } else if (primo <= 0) { 
             printf("Debe ingresar un numero entero positivo.\n");
             control = 0;
         } else {
@@ -43,8 +43,7 @@ int main(void) {
 
     } while (control == 0);
 
-    int primo = nesimo_primo(N);
-    printf("El %d-ésimo número primo es: %d\n", N, primo);
-
+    int respuesta = nesimo_primo(primo);
+    printf("El %d-ésimo número primo es: %d\n", primo, respuesta);
     return 0;
 }
