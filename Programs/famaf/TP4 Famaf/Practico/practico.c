@@ -630,6 +630,244 @@ https://apuntes-famaf-lcc.vercel.app/algoritmos1/programas_imperativos
     od
     {Q : res = <A i : 0 ≤ i < N : A.i >= 0>}
 
+    b) //este es el mas acertado de un ciclo
+
+    Especificar y derivar un programa que determine si alg ́un elemento de A es mayor a 0
+
+    Tenemos:
+
+    { P : N >= 0 }
+    S
+    { Q : res = <E i : 0 <= i < N : A.i > 0 >}
+
+    Derivacion: Neceisto un ciclo.
+    Uso tecnica de reemplazo de constantes por variable y obtengo la invariante que seria:
+
+    Inv = res = <E i : 0 <= i < pos : A.i > 0> ^ 0 <= pos < N
+
+    Mi B de do sería:
+    res != N
+
+    Entonces, el programa reeplanteado tendría la forma de:
+
+    Var a: array[0,N) of Int;
+    { P : N >= 0}
+    S1;                         //Inicializacion
+    {Inv}
+    do (pos != N)
+        {Inv ^ b}       
+            S2;                 //Cuerpo
+        {Inv}
+    od
+    {Q : res = <E i : 0 <= i < N : A.i > 0 >}               
+
+    Luego 
+    P => I es trivial.
+
+    Veamos:
+
+    //inicializacion (Requisito I { P } S1; {Inv})
+
+    Supongo como hipotesis que s1, es de:
+    res, pos := E, F;
+
+        wp.s1.I
+    ={Def de wp.}
+        wp.(res, pos := E, F;).(res = <E i : 0 <= i < pos : A.i > 0> ^ 0 <= pos < N)
+    ={Asignaciones}
+        (E = <E i : 0 <= i < F : A.i > 0> ^ 0 <= F < N)
+    ={Asumo F = 0}
+        (E = <E i : 0 <= i < 0 : A.i > 0 > ^ 0 <= 0 < N)
+    ={Hipotesis P, Rango vacío}
+        E  = False ^ True
+    ={Elijo E = False y neutro de ^}
+        True
+
+    //cuerpo { Inv ^ B } S2 { I } -> wp.s2.I
+
+    Propongo s2:
+
+    res, pos := E, pos + 1.
+
+    Hago la wp:
+
+        wp.s2.I
+    ={Def de wp}
+        wp.(res, pos := E, pos + 1.).(res = <E i : 0 <= i < pos : A.i > 0 > ^ 0 <= pos < N)
+    ={Asignaciones}
+        (E =  <E i : 0 <= i < pos + 1 : A.i > 0 > ^ 0 <= pos + 1< N)
+    ={Logica}
+        (E =  <E i : 0 <= i < pos v i = pos : A.i > 0 > ^ 0 <= pos + 1< N)
+    ={Particion de rango}
+        (E =  <E i : 0 <= i < pos : A.i > 0 > v <E i : i = pos : A.i > 0 > ^ 0 <= pos + 1 < N)
+    ={Hipotesis, Eliminacion de variable}
+        (E =  res v A.pos > 0 ^ 0 <= pos + 1 < N)
+    ={Hipotesis P}
+        (E =  res v A.pos > 0)
+    ={Elijo (E =  res v A.pos > 0) }
+        True
+
+    Quedando:
+
+    Var a: array[0,N) of Int;
+    { P : N >= 0}
+    res, pos := 0, false;                         //Inicializacion
+    {Inv}
+    do (pos != N)
+        {Inv ^ b}       
+            res, pos := res v A.pos > 0, pos + 1;                 //Cuerpo
+        {Inv}
+    od
+    {Q : res = <E i : 0 <= i < N : A.i > 0 >}
+
+    // { I ^ -b } S1 => q
+
+        (res = <E i : 0 <= i < pos : A.i > 0> ^ 0 <= pos < N) ^ -(pos != N) => (res = <E i : 0 <= i < N : A.i > 0 >)
+    ={Por logica de negacion}
+        (res = <E i : 0 <= i < pos : A.i > 0> ^ 0 <= pos < N) ^ pos = N => (res = <E i : 0 <= i < N : A.i > 0 >)
+    ={Asignacion}
+        (res = <E i : 0 <= i < pos : A.i > 0> ^ 0 <= pos < N) ^ pos = N => (res = <E i : 0 <= i < N : A.i > 0 >)
+    ={Asigno el pos}
+        (res = <E i : 0 <= i < N : A.i > 0 > ^ 0 <= N < N) => (res = <E i : 0 <= i < N : A.i > 0 >)
+    ={Suponemos antecedente y demostramos consecuente, lógica}
+        res = <E i : 0 <= i < N : A.i > 0 >
+    ={Elijo, res = <E i : 0 <= i < N : A.i > 0 >}
+        True
+
+    Var a: array[0,N) of Int;
+    {P : N >= 0}
+    res, pos := 0, false;                                          //Inicializacion
+    do (pos != N)    
+            res, pos := res v A.pos > 0, pos + 1;                 //Cuerpo
+    od
+    {Q : res = <E i : 0 <= i < N : A.i > 0 >}
+
+
+6)
+
+    {P : N >= 0}
+    S1
+    {Q: <Sum i : 0 <= i < N : i mod 2 >}
+
+7)
+
+    Const N : Int, A : array[0, N) of Int ;
+    Var r : Int ;
+    {P : N ≥0}
+    S
+    {Q : r = ⟨N i, j : 0 ≤ i < j < N : A.i = A.j ⟩}       //es conteo             -> Pag 137
+
+    Derivacion: Necesito un ciclo anidado
+
+    Necesito una invariante, uso la tecnica de reemplazo de constante con variable
+    se que el programa / respuesta final queda de la forma:
+
+    I == res = ⟨N i, j : 0 ≤ i < j < pos : A.i = A.j ⟩ ^ 0 <= pos < N
+    
+    y mi condicion del do queda:
+    B == pos < N
+
+    Por estos datos, ya se que me queda la forma:
+
+    { P : N >= 0 }
+    S1;                                 //Inicializacion
+    {Inv}
+    do (pos < N)
+        {Inv ^ B}
+        S1;                             //Cuerpo
+        {Inv}
+    od
+    {Q : r = ⟨N i, j : 0 ≤ i < j < N : A.i = A.j ⟩ }
+
+    Por tecnica de ciclos anidados, me conviene calcular el Cuerpo primero, y no la inicializacion
+
+    Cuerpo = Supongamos: I ^ B y veamos la wp.
+
+    Sabemos que s2 quedaria:
+
+    s2 = res,pos := E, pos +1;
+
+        wp.s2.I
+    ={Asignacion de wp}
+        wp.(res,pos := E, pos +1;).(res = ⟨N i, j : 0 ≤ i < j < pos : A.i = A.j ⟩ ^ 0 <= pos < N);
+    ={Asignacion}
+        (E = ⟨N i, j : 0 ≤ i < j < pos + 1 : A.i = A.j ⟩ ^ 0 <= pos + 1 < N);
+    ={Calculo auxilar de el rango de 0 ≤ i < j < pos + 1 }
+            
+
+            0 <= i < j < pos +1
+            (0 <= i) ^ (i < j) ^ (j < pos + 1)
+            (0 <= i) ^ (i < j) ^ (j <= pos)
+            (0 <= i) ^(i < j) ^ (j < pos v j = pos)
+            (0 <= i) ^(i < j) v (j < pos) v ((0 <= i) ^(i < j) ^ pos)
+            0 <= i < j < pos v (0 <= i<j ^ j=pos)
+            
+            = 0 <= i < j < pos v (0<= i < j ^ j = pos)
+
+        (E = ⟨N i, j : 0 <= i < j < pos v (0<= i < j ^ j = pos) : A.i = A.j ⟩ ^ 0 <= pos + 1 < N);    
+    ={ Particion de rango }
+        (E = ⟨N i, j : 0 <= i < j < pos : A.i = A.j ⟩ + ⟨N i, j : (0 <= i < j ^ j = pos) : A.i = A.j ⟩ ^ 0 <= pos + 1 < N);   
+    ={ Hipotesis de res }
+        E = res + ⟨N i, j : (0 <= i < j ^ j = pos) : A.i = A.j ⟩ ^ 0 <= pos + 1 < N);   
+    ={logica de P}
+        E = res + ⟨N i, j : (0 <= i < j ^ j = pos) : A.i = A.j ⟩ );
+    ={Elim de var}   
+        E = res + ⟨N i, j : (0 <= i < pos) : A.i = A.pos ⟩);
+    
+    Me trabo, no puedo fortalecer por que A.pos aparece mencionado, por lo tanto necesito el ciclo anidado mencionado, para tener una
+    hipotesis adicional.
+
+    aux = <Ni : 0 <= i < pos : A.i = A.pos >
+
+    Entonces, el programa nos quedaria
+
+    { P }
+    S1;
+    {I}
+    do B ->
+        {I ^ B}
+            S2'; -> Calculo auxiliar
+        {I ^ b ^ aux = <Ni : 0 <= i < pos : A.i = A.pos >}
+            S2; -> res, pos := res + aux pos + 1
+        {I}
+    od
+    { Q }
+
+
+            
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    {P : N ≥0}
+    res, pos := 0, 0;
+    do pos < N ->
+        aux, pos2 := 0, 0;
+        do pos2 < pos ->
+            if A.pos2 = A.pos ->
+                aux, pos2 := aux + 1, pos2;
+            [] A.pos2 != A.pos ->
+                pos2 := pos2 + 1;
+            fi
+        od;
+    od;
+    {Q : r = ⟨N i, j : 0 ≤ i < j < N : A.i = A.j ⟩}              -> Pag 137
+
+
+10) 
+    En el apunte del profe luque.
+
+
 
 
 
